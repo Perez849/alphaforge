@@ -1,0 +1,61 @@
+name: Reentrenamiento semanal
+
+on:
+  schedule:
+    - cron: '0 6 * * 6'          # sábados, con el mercado cerrado
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'Tickers concretos separados por comas (vacío = todos)'
+        type: string
+      force:
+        description: 'Reentrenar aunque los modelos sean recientes'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reentrenamiento
+  cancel-in-progress: false
+
+jobs:
+  entrenar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Autodiagnóstico
+        run: python -m alphaforge selftest      # si falla, no se entrena nada
+
+      - name: Entrenar
+        run: |
+          python scripts/train_all.py \
+            --universe universe.json --out models \
+            --skip-fresh-days ${{ inputs.force && '0' || '5' }} \
+            ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
+
+      - name: Guardar modelos
+        run: |
+          git config user.name  "alphaforge-bot"
+          git config user.email "actions@github.com"
+          git add models
+          git diff --staged --quiet && echo "sin cambios" && exit 0
+          git commit -m "modelos $(date -u +%Y-%m-%d)"
+          # el remoto puede haber avanzado (el otro workflow, o un commit tuyo):
+          # sin rebase el push falla y el día se pierde en silencio
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+              git push && exit 0
+            echo "reintento $i..."; sleep $((i * 5))
+          done
+          echo "::error::no se pudo publicar tras 3 intentos"; exit 1
