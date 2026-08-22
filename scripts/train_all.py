@@ -54,6 +54,9 @@ def main() -> int:
                     help="no reentrenar si el modelo tiene menos de N días")
     ap.add_argument("--site-data", default="docs/data",
                     help="dónde publicar el resumen de fiabilidad para la web")
+    ap.add_argument("--part-out", default=None,
+                    help="volcar el resultado como trozo suelto (ejecución en "
+                         "paralelo); no toca docs/data")
     args = ap.parse_args()
 
     suppress_noisy_warnings()
@@ -120,12 +123,23 @@ def main() -> int:
         "models": index, "failures": failures,
         "n_go": sum(1 for m in index if m["verdict"] == "GO"),
     }
+
+    # Modo paralelo: cada job deja su trozo y otro paso los une. Así no hay
+    # varios workflows peleándose por hacer push a la vez.
+    if args.part_out:
+        os.makedirs(args.part_out, exist_ok=True)
+        with open(os.path.join(args.part_out, "summary.json"), "w") as f:
+            json.dump({"models": summaries, "index": index,
+                       "failures": failures}, f, indent=2, ensure_ascii=False)
+        log.info(f"trozo escrito en {args.part_out}/summary.json "
+                 f"({len(summaries)} modelos)")
+        return 0 if index else 1
     with open(os.path.join(args.out, "index.json"), "w") as f:
         json.dump(manifest, f, indent=2)
 
     # Resumen de fiabilidad: es lo que llena la web desde el primer día, sin
     # esperar a acumular señales en vivo.
-    if summaries:
+    if summaries and not args.part_out:
         os.makedirs(args.site_data, exist_ok=True)
         with open(site_path, "w") as f:
             json.dump({"generated": manifest["generated"],

@@ -220,7 +220,7 @@ def build_anchor(daily: pd.DataFrame, ticker: str, cfg: Config,
             log.warning(f"ancla: sin datos {interval} para {ticker} ({e})")
             continue
         try:
-            s, vol = _extract_anchor_from_intraday(intr, off, interval)
+            s, vol, sess_close = _extract_anchor_from_intraday(intr, off, interval)
         except Exception as e:                            # noqa: BLE001
             log.warning(f"ancla: fallo extrayendo {interval}: {e}")
             continue
@@ -228,7 +228,7 @@ def build_anchor(daily: pd.DataFrame, ticker: str, cfg: Config,
             log.warning(f"ancla: {interval} aporta solo {len(s)} días, se descarta")
             continue
         if best is None or len(s) > len(best[0]):
-            best = (s, vol, interval)
+            best = (s, vol, interval, sess_close)
 
     close = daily["Close"]
     if best is None:
@@ -239,8 +239,38 @@ def build_anchor(daily: pd.DataFrame, ticker: str, cfg: Config,
         return AnchorResult(price=close.copy(), source="close_proxy", coverage=0.0,
                             residual_stats=_residual_stats(pd.Series(dtype=float)))
 
-    anchor_real, vol_real, source = best
+    anchor_real, vol_real, source, sess_close = best
     anchor_real = anchor_real[~anchor_real.index.duplicated(keep="last")]
+    sess_close = sess_close[~sess_close.index.duplicated(keep="last")]
+
+    # ── REESCALADO A LA ESCALA DE LA SERIE DIARIA ────────────────────────────
+    # yfinance sirve el histórico diario ajustado por dividendos y splits, y el
+    # intradía con otro criterio: son escalas de precio DISTINTAS. Mezclarlas en
+    # y(t) = Close(t+1)/Ancla(t) - 1 mete un sesgo sistemático del tamaño del
+    # dividendo acumulado (medido en SPY: 161 bps) y fabrica una correlación
+    # falsa con el retorno futuro.
+    #
+    # El puente es el cierre de la sesión, que ambas series conocen: el factor
+    # Close_diario / Close_intradía lleva el ancla a la escala correcta y anula
+    # de paso cualquier otra discrepancia de ajuste.
+    common0 = close.index.intersection(sess_close.index)
+    factor = pd.Series(1.0, index=anchor_real.index)
+    if len(common0) >= 10:
+        f = (close.loc[common0] / sess_close.loc[common0].where(
+            sess_close.loc[common0].abs() > 1e-12))
+        f = f.replace([np.inf, -np.inf], np.nan).dropna()
+        # un factor sano vive cerca de 1; lejos de ahí hay algo roto
+        f = f[(f > 0.5) & (f < 2.0)]
+        if len(f) >= 10:
+            drift = float((f - 1.0).abs().mean())
+            factor = f.reindex(anchor_real.index).ffill().bfill().fillna(1.0)
+            if drift > 0.0005:
+                log.info(f"ancla reescalada a la serie diaria: desajuste medio "
+                         f"{1e4 * drift:.0f} bps (ajuste por dividendos/splits)")
+        else:
+            log.warning("no se pudo calcular el factor de escala del ancla; "
+                        "se usa sin reescalar")
+    anchor_real = anchor_real * factor.reindex(anchor_real.index).fillna(1.0)
 
     # Solape para calibrar
     common = close.index.intersection(anchor_real.index)
@@ -310,6 +340,9 @@ def _extract_anchor_from_intraday(intr: pd.DataFrame, offset_min: int,
     price = last["Open"] * (1 - frac) + last["Close"] * frac
 
     vol = elig.groupby("_date")["Volume"].sum()   # volumen SOLO hasta el corte
+    # cierre de la sesión SEGÚN LAS BARRAS INTRADÍA: sirve de puente para
+    # llevar el ancla a la misma escala de precios que la serie diaria
+    sess_close = df.groupby("_date")["Close"].last()
 
     # Días con tan pocas barras que el margen no es fiable (sesiones truncadas
     # por incidencias, o resolución insuficiente): se descartan en vez de
@@ -317,10 +350,12 @@ def _extract_anchor_from_intraday(intr: pd.DataFrame, offset_min: int,
     n_bars = elig.groupby("_date").size()
     ok = n_bars[n_bars >= 2].index
     price, vol = price.loc[ok], vol.loc[ok]
+    sess_close = sess_close.reindex(ok)
 
-    price.index = pd.to_datetime(price.index)
-    vol.index = pd.to_datetime(vol.index)
-    return price.astype(float).sort_index(), vol.astype(float).sort_index()
+    for x in (price, vol, sess_close):
+        x.index = pd.to_datetime(x.index)
+    return (price.astype(float).sort_index(), vol.astype(float).sort_index(),
+            sess_close.astype(float).sort_index())
 
 
 def _residual_stats(resid: pd.Series) -> dict:

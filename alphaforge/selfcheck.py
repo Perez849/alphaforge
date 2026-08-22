@@ -162,7 +162,7 @@ def _t_anchor():
                        "Low": np.arange(len(ts)) - 1.0,
                        "Close": np.arange(len(ts)) + 0.5,
                        "Volume": 100.0}, index=ts)
-    price, vol = _extract_anchor_from_intraday(df, offset_min=30, interval="30m")
+    price, vol, _ = _extract_anchor_from_intraday(df, offset_min=30, interval="30m")
     # Con offset 30' el corte está en 15:30 ET; la barra elegida empieza ahí,
     # luego frac = 0 y el precio es su Open.
     et = df.copy()
@@ -181,7 +181,7 @@ def _t_anchor_vol():
     ts = pd.date_range("2026-03-02 14:30", "2026-03-02 21:00", freq="30min", tz="UTC")
     df = pd.DataFrame({"Open": 10.0, "High": 11.0, "Low": 9.0, "Close": 10.5,
                        "Volume": 1.0}, index=ts)
-    _, vol = _extract_anchor_from_intraday(df, offset_min=30, interval="30m")
+    _, vol, _ = _extract_anchor_from_intraday(df, offset_min=30, interval="30m")
     total = df.between_time("14:30", "21:00")["Volume"].sum()
     assert vol.iloc[0] < total, "el volumen del ancla incluye la barra final"
     return f"volumen ancla {vol.iloc[0]:.0f} < total sesión {total:.0f}"
@@ -199,7 +199,7 @@ def _t_half_day():
 
     df = pd.concat([sesion("2026-11-25", "16:00"),      # normal
                     sesion("2026-11-27", "13:00")])     # Black Friday
-    price, vol = _extract_anchor_from_intraday(df, 30, "30m")
+    price, vol, _ = _extract_anchor_from_intraday(df, 30, "30m")
     assert len(price) == 2, f"se esperaban 2 días, hay {len(price)}"
     for d, pv in price.items():
         day = df[df.index.date == d.date()]
@@ -540,6 +540,49 @@ def _t_anchor_timing():
     return (f"T−{casos['pronto']['mins']:.0f}′ = prematura, "
             f"T−{casos['en hora']['mins']:.0f}′ = correcta, "
             f"T−{casos['tarde']['mins']:.0f}′ = tardía")
+
+
+@check("ancla: se reescala a la escala de la serie diaria")
+def _t_anchor_rescale():
+    """yfinance sirve el diario ajustado por dividendos y el intradía con otro
+    criterio. Mezclarlos mete un sesgo del tamaño del dividendo acumulado
+    (medido en SPY real: 161 bps) y fabrica correlación falsa con el futuro."""
+    from alphaforge.data import build_anchor
+    from alphaforge.config import Config as C
+    import alphaforge.data as D
+
+    n = 400
+    idx = pd.bdate_range("2026-01-02", periods=n)
+    px = 100 * np.cumprod(1 + np.random.default_rng(7).normal(0, 0.01, n))
+    daily = pd.DataFrame({"Open": px * 0.999, "High": px * 1.01, "Low": px * 0.99,
+                          "Close": px, "Volume": 1e6}, index=idx)
+
+    DIV = 0.984                       # el intradía viene 1.6% por encima
+    anchor_raw = pd.Series(px * 0.998 / DIV, index=idx)
+    sess_close = pd.Series(px / DIV, index=idx)
+    vol = pd.Series(1e5, index=idx)
+
+    orig = D.download
+    D.download = lambda *a, **k: pd.DataFrame(
+        {"Open": [1.0], "High": [1.0], "Low": [1.0], "Close": [1.0], "Volume": [1.0]},
+        index=pd.DatetimeIndex(["2026-01-02 15:00"], tz="America/New_York"))
+    orig_ex = D._extract_anchor_from_intraday
+    D._extract_anchor_from_intraday = lambda *a, **k: (anchor_raw, vol, sess_close)
+    try:
+        cfg = C()
+        cfg.data.anchor_intervals = ("30m",)
+        res = build_anchor(daily, "TEST", cfg, verbose=0)
+    finally:
+        D.download, D._extract_anchor_from_intraday = orig, orig_ex
+
+    sesgo = float((daily["Close"] / res.price - 1).mean())
+    sin_reescalar = float((daily["Close"] / anchor_raw - 1).mean())
+    assert abs(sin_reescalar) > 0.010, "el caso de prueba no reproduce el sesgo"
+    assert abs(sesgo) < 0.004, (
+        f"tras reescalar queda un sesgo de {1e4 * sesgo:.0f} bps "
+        f"(sin reescalar: {1e4 * sin_reescalar:.0f} bps)")
+    return (f"sesgo {1e4 * sin_reescalar:+.0f} bps -> {1e4 * sesgo:+.0f} bps "
+            f"tras llevar el ancla a la escala diaria")
 
 
 # ---------------------------------------------------------------------------

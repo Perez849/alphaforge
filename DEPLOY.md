@@ -119,13 +119,23 @@ python -m alphaforge predict --ticker AAPL --model models/AAPL.pkl --price 231.4
 
 ## Coste de tiempo
 
+El entrenamiento va en paralelo: **un job por valor**, todos a la vez. GitHub
+permite 20 simultáneos en repositorios públicos, así que diez valores tardan lo
+que el más lento, no la suma.
+
 | Tarea | Frecuencia | Duración |
 |---|---|---|
-| Entrenamiento | semanal | 3-8 min por valor |
+| Entrenamiento | semanal | ~20 min en total (15-25 por valor, en paralelo) |
 | Señales | diaria | ~20 s por valor |
 | Resolución | diaria | ~10 s |
 
-Con 8 valores: unos 45 min los sábados y 4 min al día.
+El flujo tiene tres fases: comprobar el código y preparar la lista, entrenar
+todos los valores a la vez, y un único paso final que consolida y publica. Ese
+último paso es el único que hace `push`, así que no hay jobs peleándose por
+escribir a la vez.
+
+Si un valor falla, los demás siguen (`fail-fast: false`) y el fallo se reporta
+en el log de consolidación.
 
 ## Fiabilidad desde el primer día
 

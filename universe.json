@@ -1,5 +1,5 @@
 {
-  "tickers": ["SPY", "QQQ", "AAPL", "MSFT", "MU", "AMZN", "META", "GOOGL", "SKHY", "SNDK"],
+  "tickers": ["SPY", "QQQ", "AAPL", "MSFT", "NVDA", "AMZN", "META", "GOOGL"],
   "save_reports": true,
   "config": {
     "data": {

@@ -4,7 +4,7 @@ Predicción direccional día-siguiente con ML/redes neuronales, **con las defens
 anti-sobreajuste puestas por delante del resultado**. Entrada a T−30′ del cierre
 americano para no regalarle el gap de apertura al mercado.
 
-Estado: **37/37 autodiagnósticos superados**.
+Estado: **39/39 autodiagnósticos superados**.
 
 ---
 
@@ -176,7 +176,7 @@ Si sale NO-GO, la señal se marca como *informativa, no operable*.
 
 ---
 
-## Prevención de bugs — 37 comprobaciones
+## Prevención de bugs — 39 comprobaciones
 
 ```
 features: el bloque BASE está desplazado un día
@@ -202,6 +202,8 @@ ensemble: la mezcla se hace en el mismo espacio en que se pesó
 calibrador: se elige por validación, no a mano
 pesos de muestra: el decaimiento es relativo a cada fold
 selección de features: hay purga entre core y holdout
+ancla: se reescala a la escala de la serie diaria
+reloj: se detecta el ancla prematura, no solo la tardía
 splits: purga y embargo se respetan
 splits: configuración incoherente aborta
 PBO: configuraciones aleatorias dan PBO ~ 0.5
@@ -340,6 +342,29 @@ hallazgos, algunos del tipo que no se detecta nunca porque no rompe nada:
     permutación pegaba con el de entrenamiento, así que la etiqueta del último
     día usaba el precio del primero del holdout. Fuga pequeña, pero situada
     justo en la elección de las features del modelo.
+
+## Quinta pasada: hallazgos con datos reales
+
+24. **El ancla intradía y la serie diaria estaban en escalas distintas.** Este lo
+    encontró la guarda anti-fuga en la primera ejecución real, y es el mejor
+    ejemplo de por qué existe. yfinance sirve el histórico diario ajustado por
+    dividendos y las barras intradía con otro criterio. Como
+    `y(t) = Close(t+1)/Ancla(t) − 1` mezcla ambas, aparecía un sesgo sistemático
+    que ordenaba exactamente igual que el dividendo de cada valor:
+
+    | valor | sesgo del ancla | dividendo aprox. |
+    |-------|----------------|------------------|
+    | SPY   | −161 bps       | 1,5 %            |
+    | MSFT  | −121 bps       | 0,8 %            |
+    | QQQ   | −73 bps        | 0,6 %            |
+    | AAPL  | −62 bps        | 0,5 %            |
+    | MU    | −36 bps        | 0,4 %            |
+
+    Ese sesgo fabricaba una correlación de −0,35 con el retorno futuro y la
+    guarda abortó el entrenamiento de SPY. No era fuga temporal: era un
+    desajuste de datos que habría inflado el backtest en silencio. Ahora el
+    ancla se lleva a la escala diaria usando el cierre de sesión como puente,
+    lo que además anula splits y cualquier otra discrepancia de ajuste.
 
 ### El test que más importa
 
