@@ -1,0 +1,20 @@
+{
+  "tickers": ["SPY", "QQQ", "AAPL", "MSFT", "NVDA", "AMZN", "META", "GOOGL"],
+  "save_reports": true,
+  "config": {
+    "data": {
+      "start": "2006-01-01",
+      "anchor_offset_min": 60,
+      "anchor_intervals": ["30m", "1h"],
+      "context_tickers": ["SPY", "QQQ", "^VIX", "TLT", "UUP", "GLD"]
+    },
+    "label":      { "horizon": "close_next", "threshold_mode": "cost" },
+    "model":      { "n_trials": 40, "families": ["logit", "hgb", "extratrees", "mlp", "gru"] },
+    "validation": { "n_splits": 8, "n_permutations": 60, "min_train_days": 1000 },
+    "backtest":   { "prob_threshold": 0.55, "sizing": "confidence", "allow_short": true },
+    "verbose": 1
+  },
+  "overrides": {
+    "SPY": { "backtest.allow_short": false }
+  }
+}

@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0B1118">
+<title>Tablón de señales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B1118; --surf:#131D28; --surf2:#1A2734; --line:#24333F;
+  --txt:#E7EEF3; --dim:#8CA0AF; --faint:#5A6E7D;
+  --long:#3FBF8F; --short:#E36049; --amber:#F2B134; --flat:#6B7F8D;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --disp:"Archivo",system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--disp);
+  -webkit-font-smoothing:antialiased;line-height:1.45}
+.wrap{max-width:1040px;margin:0 auto;padding:26px 16px 80px}
+
+/* cabecera */
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:18px}
+.brand{font-size:clamp(26px,6.5vw,38px);font-weight:800;letter-spacing:-.03em;
+  line-height:1;margin:0}
+.brand span{color:var(--amber)}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+.stamp{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:right}
+.stamp b{color:var(--txt);font-weight:500}
+.flag{display:inline-block;background:var(--amber);color:#0B1118;font-family:var(--mono);
+  font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.04em}
+
+/* pestañas */
+nav{display:flex;gap:2px;margin:20px 0 4px;background:var(--surf);padding:3px;
+  border-radius:9px;width:fit-content}
+nav button{font-family:var(--disp);font-size:13px;font-weight:600;color:var(--dim);
+  background:none;border:0;padding:9px 18px;border-radius:7px;cursor:pointer;
+  transition:background .18s,color .18s}
+nav button[aria-selected=true]{background:var(--surf2);color:var(--txt)}
+nav button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+section[hidden]{display:none}
+h2{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);margin:34px 0 14px;font-weight:500}
+.note{font-size:13px;color:var(--dim);max-width:64ch;margin:0 0 18px}
+.note b{color:var(--txt)}
+
+/* filas de señal */
+.row{display:grid;grid-template-columns:96px 78px 1fr 92px;gap:16px;align-items:center;
+  padding:16px 14px;margin-bottom:6px;background:var(--surf);border-radius:10px;
+  border-left:3px solid var(--flat)}
+.row.long{border-left-color:var(--long)} .row.short{border-left-color:var(--short)}
+.row.off{opacity:.44}
+.tk{font-weight:800;font-size:19px;letter-spacing:-.01em}
+.tk small{display:block;font-family:var(--mono);font-size:10px;font-weight:400;
+  color:var(--faint);margin-top:3px;letter-spacing:.03em}
+.prob{font-family:var(--mono);font-size:24px;font-weight:700;text-align:right;line-height:1}
+.prob small{display:block;font-size:9px;color:var(--faint);font-weight:400;margin-top:4px;
+  letter-spacing:.08em;text-transform:uppercase}
+.scale{position:relative;height:40px}
+.axis{position:absolute;top:20px;left:0;right:0;height:1px;background:var(--line)}
+.zero{position:absolute;top:9px;bottom:9px;width:1px;background:var(--faint)}
+.span{position:absolute;top:17px;height:7px;border-radius:4px;background:var(--flat);
+  opacity:.45}
+.span.long{background:var(--long)} .span.short{background:var(--short)}
+.tick{position:absolute;top:11px;width:3px;height:19px;border-radius:2px;background:var(--txt)}
+.slab{position:absolute;top:0;font-family:var(--mono);font-size:9px;color:var(--faint)}
+.val{font-family:var(--mono);font-size:14px;text-align:right;font-weight:700}
+.val small{display:block;font-size:9px;font-weight:400;color:var(--faint);margin-top:4px;
+  letter-spacing:.06em;text-transform:uppercase}
+.long-c{color:var(--long)} .short-c{color:var(--short)} .flat-c{color:var(--flat)}
+
+/* tarjetas */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.card{background:var(--surf);padding:15px;border-radius:10px}
+.card .k{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint)}
+.card .v{font-family:var(--mono);font-size:26px;font-weight:700;margin-top:7px;line-height:1}
+.card .n{font-size:11px;color:var(--dim);margin-top:6px}
+
+/* selector de valor */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.chip{font-family:var(--mono);font-size:12px;font-weight:500;padding:7px 13px;
+  background:var(--surf);border:1px solid var(--line);border-radius:20px;cursor:pointer;
+  color:var(--dim);transition:.15s}
+.chip[aria-pressed=true]{background:var(--surf2);color:var(--txt);border-color:var(--faint)}
+.chip .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;
+  vertical-align:middle}
+
+/* gráficos */
+.chart{background:var(--surf);border-radius:10px;padding:14px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.cal{display:grid;gap:7px}
+.calrow{display:grid;grid-template-columns:52px 1fr 60px;gap:10px;align-items:center;
+  font-family:var(--mono);font-size:11px}
+.calbar{position:relative;height:20px;background:var(--surf2);border-radius:4px}
+.calfill{position:absolute;top:0;bottom:0;left:0;border-radius:4px;background:var(--long);
+  opacity:.72}
+.calmark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--amber)}
+
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+th{text-align:right;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);padding:8px 9px;border-bottom:1px solid var(--line);font-weight:500}
+th:first-child,td:first-child{text-align:left}
+td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:right}
+tr:last-child td{border-bottom:0}
+
+.checks{display:grid;gap:5px}
+.check{display:grid;grid-template-columns:20px 1fr auto;gap:10px;align-items:center;
+  padding:10px 13px;background:var(--surf);border-radius:8px;font-size:13px}
+.check .ic{font-family:var(--mono);font-weight:700}
+.check .d{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right}
+.ok{color:var(--long)} .no{color:var(--short)} .meh{color:var(--amber)}
+
+.verdict{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);
+  font-size:11px;font-weight:700;letter-spacing:.1em;padding:5px 11px;border-radius:5px}
+.v-GO{background:rgba(63,191,143,.16);color:var(--long)}
+.v-REVISAR{background:rgba(242,177,52,.16);color:var(--amber)}
+.v-NOGO{background:rgba(227,96,73,.16);color:var(--short)}
+
+.empty{padding:44px 20px;text-align:center;color:var(--dim);font-size:14px;
+  background:var(--surf);border-radius:10px}
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;
+  color:var(--faint);line-height:1.65;max-width:68ch}
+
+@media(max-width:640px){
+  .row{grid-template-columns:1fr auto;gap:10px 12px;padding:14px}
+  .scale{grid-column:1/-1;height:36px}
+  .val{grid-column:2;text-align:right}
+  .stamp{text-align:left}
+  .top{flex-direction:column;gap:12px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .row,.card{animation:rise .34s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <div class="eyebrow">Señales para la sesión siguiente</div>
+    <h1 class="brand">Tabl<span>ó</span>n</h1>
+  </div>
+  <div class="stamp" id="stamp">Cargando…</div>
+</div>
+
+<nav role="tablist">
+  <button role="tab" id="tab-hoy" aria-selected="true" onclick="tab('hoy')">Hoy</button>
+  <button role="tab" id="tab-fia" aria-selected="false" onclick="tab('fia')">Fiabilidad</button>
+</nav>
+
+<section id="s-hoy">
+  <p class="note">La barra muestra el <b>rango probable</b> del movimiento (P10–P90)
+  y la marca vertical la estimación central. El rango casi siempre es mucho más
+  ancho que la estimación: eso es lo honesto.</p>
+  <div id="rows"></div>
+  <div id="errors"></div>
+  <h2>Marcador en vivo</h2>
+  <p class="note">Señales publicadas <b>antes</b> de conocerse el resultado. Es el
+  único número imposible de retocar a posteriori. Se llena a partir del segundo día.</p>
+  <div class="cards" id="live"></div>
+</section>
+
+<section id="s-fia" hidden>
+  <p class="note">Todo lo de aquí sale del <b>walk-forward</b>: cada día fue
+  predicho por un modelo entrenado únicamente con datos anteriores. Disponible
+  desde el primer entrenamiento, sin esperar a acumular señales.</p>
+  <div class="chips" id="chips"></div>
+  <div id="detail"></div>
+</section>
+
+<footer>
+  Publicado automáticamente una hora antes del cierre del mercado americano.
+  Entrada al precio de ese momento, salida al cierre de la sesión siguiente.
+  Solo las filas <b>GO</b> superaron la validación completa. Esto estima
+  probabilidades, no certezas.
+</footer>
+</div>
+
+<script>
+const pct=(x,n=1)=>x==null||!isFinite(x)?"—":(100*x).toFixed(n)+"%";
+const spct=(x,n=2)=>x==null||!isFinite(x)?"—":(x>=0?"+":"")+(100*x).toFixed(n)+"%";
+const num=(x,n=2)=>x==null||!isFinite(x)?"—":Number(x).toFixed(n);
+const vclass=v=>"v-"+(v||"").replace("-","");
+let BT=null,SEL=null;
+
+function tab(w){
+  for(const k of ["hoy","fia"]){
+    document.getElementById("s-"+k).hidden=(k!==w);
+    document.getElementById("tab-"+k).setAttribute("aria-selected",k===w);
+  }
+}
+
+function renderToday(d){
+  document.getElementById("stamp").innerHTML=
+    `Ancla <b>${d.anchor_et} ET</b><br>a <b>${num(d.minutes_to_close,0)} min</b> del cierre`+
+    (d.late?`<br><span class="flag">ANCLA TARDÍA (${num(d.mismatch_min,0)} min)</span>`:"")+
+    (d.early?`<br><span class="flag">ANCLA PREMATURA: T−${num(d.offset_actual_min,0)}′ `+
+      `en vez de T−${d.offset_target_min}′ · señal orientativa</span>`:"")+
+    (d.signals.some(s=>s.anchor_degraded)?`<br><span class="flag">PRECIO NO INTRADÍA</span>`:"");
+
+  let max=0.004;
+  d.signals.forEach(s=>[s.ret_p10,s.ret_p90,s.expected_return].forEach(
+    v=>{if(v!=null&&isFinite(v))max=Math.max(max,Math.abs(v))}));
+  max*=1.18;
+  const X=v=>50+50*(v/max);
+
+  document.getElementById("rows").innerHTML=d.signals.map((s,i)=>{
+    const dir=s.position>0?"long":(s.position<0?"short":"flat");
+    const lo=s.ret_p10??0,hi=s.ret_p90??0,mid=s.expected_return??0;
+    return `<div class="row ${dir} ${s.operable?"":"off"}" style="animation-delay:${i*26}ms">
+      <div class="tk">${s.ticker}<small>${s.anchor_price} · ${s.verdict}</small>
+        ${s.health&&s.health.warnings&&s.health.warnings.length?
+          `<small style="color:var(--amber)">⚠ ${s.health.warnings[0]}</small>`:""}</div>
+      <div class="prob ${dir}-c">${pct(s.prob_up,0)}<small>sube</small></div>
+      <div class="scale">
+        <div class="axis"></div><div class="zero" style="left:50%"></div>
+        <div class="span ${dir}" style="left:${X(lo)}%;width:${Math.max(X(hi)-X(lo),1)}%"></div>
+        <div class="tick" style="left:${X(mid)}%"></div>
+        <div class="slab" style="left:0">${spct(-max,1)}</div>
+        <div class="slab" style="right:0">${spct(max,1)}</div>
+      </div>
+      <div class="val ${dir}-c">${spct(mid)}<small>${s.direction} ${num(s.position)}x</small></div>
+    </div>`}).join("");
+
+  if(d.errors&&d.errors.length) document.getElementById("errors").innerHTML=
+    `<div class="empty">Sin señal: ${d.errors.map(e=>e.ticker+" ("+e.error+")").join(" · ")}</div>`;
+}
+
+function renderLive(sb){
+  const o=sb&&sb.overall,p=sb&&sb.operable_only;
+  const el=document.getElementById("live");
+  if(!o||!o.n){el.innerHTML=`<div class="empty">Todavía sin resultados en vivo.<br>
+    Mientras tanto, mira la pestaña <b>Fiabilidad</b>: ahí ya hay años de
+    predicciones fuera de muestra.</div>`;return;}
+  el.innerHTML=`
+   <div class="card"><div class="k">Acierto</div><div class="v">${pct(o.hit_rate)}</div>
+     <div class="n">${o.n} señales</div></div>
+   <div class="card"><div class="k">Acierto GO</div><div class="v">${pct(p.hit_rate)}</div>
+     <div class="n">${p.n} operables</div></div>
+   <div class="card"><div class="k">Acumulado</div><div class="v">${spct(p.cum_pnl,1)}</div>
+     <div class="n">tras costes</div></div>
+   <div class="card"><div class="k">Dentro del rango</div>
+     <div class="v">${pct(o.interval_coverage,0)}</div><div class="n">objetivo 80%</div></div>`;
+}
+
+function renderChips(){
+  const col=v=>v==="GO"?"var(--long)":(v==="REVISAR"?"var(--amber)":"var(--short)");
+  const pf=BT.portfolio&&BT.portfolio.n_days?
+    `<button class="chip" aria-pressed="${SEL==="__pf"}" onclick="pick('__pf')">
+      <span class="dot" style="background:var(--amber)"></span>CARTERA</button>`:"";
+  document.getElementById("chips").innerHTML=pf+Object.keys(BT.models).map(k=>
+    `<button class="chip" aria-pressed="${SEL===k}" onclick="pick('${k}')">
+      <span class="dot" style="background:${col(BT.models[k].verdict)}"></span>${k}</button>`
+  ).join("");
+}
+function pick(k){SEL=k;renderChips();renderDetail()}
+
+function sparkline(pts,keys,colors,h){
+  h=h||150;
+  if(!pts||!pts.length)return"";
+  const W=800,P=6;
+  const all=keys.flatMap(k=>pts.map(p=>p[k]).filter(v=>v!=null));
+  const lo=Math.min.apply(null,all),hi=Math.max.apply(null,all),rg=(hi-lo)||1;
+  const X=i=>P+i*(W-2*P)/Math.max(pts.length-1,1);
+  const Y=v=>h-P-((v-lo)/rg)*(h-2*P);
+  const line=(k,c,w)=>`<polyline fill="none" stroke="${c}" stroke-width="${w}"
+     stroke-linejoin="round" points="${pts.map((p,i)=>p[k]==null?"":X(i)+","+Y(p[k]))
+     .filter(Boolean).join(" ")}"/>`;
+  const one=Y(1);
+  return `<svg viewBox="0 0 ${W} ${h}" preserveAspectRatio="none" role="img"
+    aria-label="Evolución del resultado">
+    <line x1="0" y1="${one}" x2="${W}" y2="${one}" stroke="var(--line)" stroke-dasharray="4 4"/>
+    ${keys.map((k,i)=>line(k,colors[i],i?1.4:2.4)).join("")}
+    <text x="4" y="12" fill="var(--faint)" font-size="11" font-family="monospace">${pts[0].d}</text>
+    <text x="${W-4}" y="12" fill="var(--faint)" font-size="11" text-anchor="end"
+      font-family="monospace">${pts[pts.length-1].d}</text></svg>`;
+}
+
+function renderDetail(){
+  const el=document.getElementById("detail");
+  if(SEL==="__pf"){
+    const p=BT.portfolio;
+    el.innerHTML=`<div class="cards">
+      <div class="card"><div class="k">Acumulado</div>
+        <div class="v ${p.total_return>=0?"long-c":"short-c"}">${spct(p.total_return,1)}</div>
+        <div class="n">${p.n_days} días · ${p.members} valores</div></div>
+      <div class="card"><div class="k">Sharpe</div><div class="v">${num(p.sharpe)}</div>
+        <div class="n">equiponderada</div></div>
+      <div class="card"><div class="k">Días en verde</div>
+        <div class="v">${pct(p.hit_rate)}</div><div class="n">de la cartera</div></div></div>
+      <h2>Evolución</h2><div class="chart">${sparkline(p.curve,["e"],["var(--amber)"])}</div>
+      <p class="note">${p.note}</p>`;
+    return;
+  }
+  const m=BT.models[SEL]; if(!m){el.innerHTML="";return}
+  const h=m.headline,t=m.trust;
+
+  const cal=(m.calibration||[]).map(b=>`
+    <div class="calrow"><span>${pct(b.p_pred,0)}</span>
+      <div class="calbar"><div class="calfill" style="width:${100*b.p_obs}%"></div>
+        <div class="calmark" style="left:${100*b.p_pred}%"></div></div>
+      <span class="${b.p_obs>=b.p_pred?"ok":"no"}">${pct(b.p_obs,0)}</span></div>`).join("");
+
+  const checks=(m.checks||[]).map(c=>`<div class="check">
+      <span class="ic ${c.pass?"ok":(c.critical?"no":"meh")}">${c.pass?"✓":(c.critical?"✕":"~")}</span>
+      <span>${c.check}</span><span class="d">${c.detail}</span></div>`).join("");
+
+  const years=(m.by_year||[]).map(y=>`<tr><td>${y.year}</td><td>${y.n_trades}</td>
+      <td class="${y.return>=0?"long-c":"short-c"}">${spct(y.return,1)}</td>
+      <td>${num(y.sharpe)}</td><td>${pct(y.hit)}</td></tr>`).join("");
+
+  el.innerHTML=`
+   <div class="verdict ${vclass(m.verdict)}">${m.verdict}</div>
+   <p class="note" style="margin-top:12px">${m.period.years} años fuera de muestra
+     (${m.period.start} → ${m.period.end}) · ${h.n_trades} operaciones ·
+     ${t.n_configs_tried} configuraciones probadas</p>
+
+   <div class="cards">
+     <div class="card"><div class="k">Acierto direccional</div>
+       <div class="v">${pct(h.directional_accuracy)}</div>
+       <div class="n">50% = moneda al aire</div></div>
+     <div class="card"><div class="k">Sharpe</div><div class="v">${num(h.sharpe)}</div>
+       <div class="n">corregido por solape (bruto ${num(h.sharpe_raw)}) ·
+         B&amp;H ${num(h.bh_sharpe)}</div></div>
+     <div class="card"><div class="k">Acumulado</div>
+       <div class="v ${h.total_return>=0?"long-c":"short-c"}">${spct(h.total_return,0)}</div>
+       <div class="n">B&amp;H: ${spct(h.bh_total_return,0)}</div></div>
+     <div class="card"><div class="k">Peor caída</div>
+       <div class="v short-c">${pct(h.max_dd)}</div><div class="n">máximo a mínimo</div></div>
+   </div>
+
+   ${m.executable && m.executable.sharpe!=null ? `
+   <h2>PnL ejecutable</h2>
+   <p class="note">Las cifras de arriba suman tramos que se solapan una hora al
+     encadenar días. Esto es lo mismo medido <b>ancla a ancla</b>, sin
+     solapamiento: es lo que de verdad podrías ejecutar. Si difieren mucho,
+     desconfía.</p>
+   <div class="cards">
+     <div class="card"><div class="k">Sharpe ejecutable</div>
+       <div class="v">${num(m.executable.sharpe)}</div>
+       <div class="n">frente a ${num(h.sharpe)} solapado</div></div>
+     <div class="card"><div class="k">Acumulado ejecutable</div>
+       <div class="v ${m.executable.total_return>=0?"long-c":"short-c"}">
+         ${spct(m.executable.total_return,0)}</div>
+       <div class="n">frente a ${spct(h.total_return,0)}</div></div>
+     <div class="card"><div class="k">Peor caída</div>
+       <div class="v short-c">${pct(m.executable.max_dd)}</div>
+       <div class="n">sobre el PnL ejecutable</div></div>
+   </div>` : ""}
+
+   <h2>Evolución fuera de muestra</h2>
+   <div class="chart">${sparkline(m.curve,["e","b"],["var(--long)","var(--flat)"],170)}</div>
+   <p class="note">Verde: la estrategia. Gris: comprar y mantener.</p>
+
+   <h2>¿Se puede creer la probabilidad?</h2>
+   <p class="note">Cuando dice <b>60%</b>, ¿sube el 60% de las veces? La marca
+     ámbar es lo prometido; la barra, lo cumplido. Cuanto más cerca, mejor.</p>
+   <div class="cal">${cal||'<div class="empty">Sin datos de calibración</div>'}</div>
+   <div class="cards" style="margin-top:12px">
+     <div class="card"><div class="k">Error de calibración</div>
+       <div class="v">${pct(t.ece,1)}</div><div class="n">cuanto más bajo, mejor</div></div>
+     <div class="card"><div class="k">Dentro del rango</div>
+       <div class="v">${pct(t.interval_coverage,0)}</div><div class="n">objetivo 80%</div></div>
+   </div>
+
+   <h2>Año a año</h2>
+   <table><tr><th>Año</th><th>Ops</th><th>Retorno</th><th>Sharpe</th><th>Acierto</th></tr>
+     ${years||'<tr><td colspan="5">Sin datos</td></tr>'}</table>
+   <p class="note">Si el resultado se concentra en un par de años antiguos,
+     el edge probablemente ya se apagó.</p>
+
+   <h2>Defensas contra el autoengaño</h2>
+   <div class="cards">
+     <div class="card"><div class="k">PBO</div><div class="v">${num(t.pbo)}</div>
+       <div class="n">prob. de que sea casualidad · &lt;0.35</div></div>
+     <div class="card"><div class="k">Sharpe deflactado</div>
+       <div class="v">${num(t.deflated_sharpe)}</div>
+       <div class="n">descontando los intentos · &gt;0.90</div></div>
+     <div class="card"><div class="k">p-valor</div><div class="v">${num(t.p_permutation,3)}</div>
+       <div class="n">contra el azar · &lt;0.05</div></div>
+     <div class="card"><div class="k">Tramos en verde</div>
+       <div class="v">${pct(t.folds_positive,0)}</div>
+       <div class="n">${t.n_folds} periodos independientes</div></div>
+   </div>
+
+   <h2>Comprobaciones</h2><div class="checks">${checks}</div>
+   <p class="note">Precio de referencia: <b>${t.anchor_source}</b>, real en el
+     ${pct(t.anchor_coverage,0)} del histórico.
+     ${t.anchor_stress_p05!=null?`Con el ruido de ejecución real medido, el Sharpe
+     cae a <b>${num(t.anchor_stress_p05)}</b> en el peor 5% de los casos.`:""}</p>`;
+}
+
+const j=p=>fetch(p+"?"+Date.now()).then(r=>r.ok?r.json():Promise.reject());
+j("data/latest.json").then(renderToday).catch(()=>{
+  document.getElementById("stamp").textContent="Sin señales publicadas todavía";
+  document.getElementById("rows").innerHTML=`<div class="empty">
+    Aún no se ha publicado ninguna señal.<br>Si ya has entrenado, mira
+    <b>Fiabilidad</b>.</div>`;});
+j("data/scoreboard.json").then(renderLive).catch(()=>renderLive(null));
+j("data/backtest.json").then(d=>{
+  BT=d; SEL=(BT.portfolio&&BT.portfolio.n_days)?"__pf":Object.keys(BT.models)[0];
+  renderChips(); renderDetail();
+}).catch(()=>{document.getElementById("detail").innerHTML=
+  `<div class="empty">Todavía sin modelos entrenados.<br>
+   Lanza <b>Reentrenamiento semanal</b> en Actions.</div>`;});
+</script>
+</body>
+</html>

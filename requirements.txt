@@ -1,0 +1,8 @@
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+scikit-learn>=1.3
+yfinance>=0.2.40
+pyarrow>=12.0
+# opcional pero recomendado: activa la GRU real en lugar del respaldo MLP
+# torch>=2.0

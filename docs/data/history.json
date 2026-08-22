@@ -1,0 +1,45 @@
+{
+  "entries": [
+    {
+      "date": "2026-08-21",
+      "anchor_et": "2026-08-21 02:43",
+      "signals": [
+        {
+          "ticker": "SYN_A",
+          "prob_up": 0.5227,
+          "expected_return": -0.00533,
+          "ret_p10": -0.02055,
+          "ret_p90": 0.01678,
+          "position": 0.0,
+          "anchor_price": 78.737,
+          "verdict": "REVISAR",
+          "operable": false
+        },
+        {
+          "ticker": "SYN_C",
+          "prob_up": 0.5159,
+          "expected_return": 0.00166,
+          "ret_p10": -0.01471,
+          "ret_p90": 0.01687,
+          "position": 0.0,
+          "anchor_price": 34.2702,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "SYN_B",
+          "prob_up": 0.4266,
+          "expected_return": -0.00071,
+          "ret_p10": -0.0139,
+          "ret_p90": 0.01597,
+          "position": -0.4,
+          "anchor_price": 163.7299,
+          "verdict": "REVISAR",
+          "operable": false
+        }
+      ],
+      "resolved": false
+    }
+  ],
+  "updated_utc": "2026-08-21T06:43:38+00:00"
+}
