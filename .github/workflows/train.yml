@@ -90,6 +90,7 @@ jobs:
           path: |
             part/summary.json
             models/*.pkl
+            models/reports/*_oos.csv
           if-no-files-found: warn
           retention-days: 3
 
@@ -122,6 +123,13 @@ jobs:
 
       - name: Consolidar
         run: python scripts/merge_site_data.py --parts artifacts --out docs/data --models models
+
+      - name: Evaluar la cartera combinada
+        continue-on-error: true
+        run: |
+          find artifacts -name '*_oos.csv' -exec cp {} models/reports/ \; 2>/dev/null || true
+          python scripts/portfolio_eval.py --reports models/reports \
+            --out docs/data/portfolio.json || echo "sin datos de cartera todavía"
 
       - name: Publicar
         run: |
