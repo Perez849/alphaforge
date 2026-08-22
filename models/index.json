@@ -1,0 +1,111 @@
+{
+  "generated": "2026-08-22T12:08:22+00:00",
+  "models": [
+    {
+      "ticker": "GOOGL",
+      "trained_at": "2026-08-22T11:58:31+00:00",
+      "verdict": "NO-GO",
+      "sharpe": -0.19980564266339737,
+      "auc": 0.5039496912133261,
+      "pbo": 0.5281385281385281,
+      "max_dd": -0.18526357960655104,
+      "n_trades": 793,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1406280100173377,
+      "seconds": 819.2
+    },
+    {
+      "ticker": "NVDA",
+      "trained_at": "2026-08-22T11:56:52+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.196908682470833,
+      "auc": 0.5123022977523399,
+      "pbo": 0.5768398268398268,
+      "max_dd": -0.20568592294772936,
+      "n_trades": 950,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1404353689077249,
+      "seconds": 725.6
+    },
+    {
+      "ticker": "SPY",
+      "trained_at": "2026-08-22T12:07:09+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.11383491150531325,
+      "auc": 0.5084624780261182,
+      "pbo": 0.11580086580086581,
+      "max_dd": -0.18624543364657387,
+      "n_trades": 752,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1406280100173377,
+      "seconds": 1322.2
+    },
+    {
+      "ticker": "META",
+      "trained_at": "2026-08-22T11:59:55+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.012986956897249392,
+      "auc": 0.5024661279550566,
+      "pbo": 0.5865800865800865,
+      "max_dd": -0.19890108161326692,
+      "n_trades": 940,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.20334728033472804,
+      "seconds": 903.2
+    },
+    {
+      "ticker": "AMZN",
+      "trained_at": "2026-08-22T12:07:46+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.3813539002815041,
+      "auc": 0.5184556077887839,
+      "pbo": 0.21861471861471862,
+      "max_dd": -0.11443129947805442,
+      "n_trades": 1231,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1406280100173377,
+      "seconds": 1370.0
+    },
+    {
+      "ticker": "AAPL",
+      "trained_at": "2026-08-22T12:06:25+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.397315011736132,
+      "auc": 0.5201793628515395,
+      "pbo": 0.6038961038961039,
+      "max_dd": -0.09395728755163602,
+      "n_trades": 801,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1404353689077249,
+      "seconds": 1291.7
+    },
+    {
+      "ticker": "QQQ",
+      "trained_at": "2026-08-22T12:05:01+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.013393887281203476,
+      "auc": 0.49011970798710514,
+      "pbo": 0.30952380952380953,
+      "max_dd": -0.10364211999859219,
+      "n_trades": 1114,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1404353689077249,
+      "seconds": 1204.2
+    },
+    {
+      "ticker": "MSFT",
+      "trained_at": "2026-08-22T12:02:30+00:00",
+      "verdict": "NO-GO",
+      "sharpe": 0.5638929997862859,
+      "auc": 0.510197528961496,
+      "pbo": 0.5151515151515151,
+      "max_dd": -0.09382302296083622,
+      "n_trades": 866,
+      "anchor_source": "1h",
+      "anchor_coverage": 0.1404353689077249,
+      "seconds": 1056.2
+    }
+  ],
+  "failures": [],
+  "n_go": 0
+}
