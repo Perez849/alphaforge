@@ -585,6 +585,64 @@ def _t_anchor_rescale():
             f"tras llevar el ancla a la escala diaria")
 
 
+@check("sizing: el modo continuo cosecha el centro y topa los extremos")
+def _t_continuous_sizing():
+    """Con AUC ~0.52 la información vive en el centro de la distribución, no en
+    las colas. Medido sobre datos reales: el 87-89% de las predicciones caen
+    entre 0.40 y 0.60. Un umbral de 0.55 descartaba esa masa entera."""
+    from alphaforge.backtest import position_from_prob
+    cfg = Config()
+    p = pd.Series([0.40, 0.45, 0.48, 0.50, 0.52, 0.55, 0.60, 0.90])
+    pos = position_from_prob(p, cfg)
+    centro = pos[[1, 2, 4, 5]]
+    assert (centro.abs() > 0).all(), "el modo continuo sigue descartando el centro"
+    assert pos.abs().max() <= cfg.backtest.max_position + 1e-9, \
+        f"posición {pos.abs().max():.3f} por encima del tope"
+    assert abs(pos.iloc[3]) < 1e-9, "p=0.50 debería dar posición nula"
+    assert pos.iloc[6] == pytest_approx(pos.iloc[7]), \
+        "no satura: una probabilidad extrema produce una apuesta desmedida"
+    # monótono y con el signo correcto
+    assert (pos.diff().dropna() >= -1e-9).all(), "la posición no es monótona en p"
+    assert pos.iloc[0] < 0 < pos.iloc[5], "signo invertido"
+
+    viejo = Config()
+    viejo.backtest.sizing = "confidence"
+    pv = position_from_prob(p, viejo)
+    n_new = int((pos.abs() > 0).sum())
+    n_old = int((pv.abs() > 0).sum())
+    assert n_new > n_old, "el modo continuo no aumenta las ocasiones operadas"
+    return (f"opera en {n_new}/8 niveles de probabilidad frente a {n_old}/8 del "
+            f"modo anterior; tope {cfg.backtest.max_position}")
+
+
+def pytest_approx(x, tol=1e-9):
+    class _A:
+        def __eq__(self, other):
+            return abs(other - x) < tol
+    return _A()
+
+
+@check("cartera: la diversificación se calcula bien")
+def _t_portfolio_math():
+    """Sharpe de N señales independientes = Sharpe medio x sqrt(N)."""
+    rng = np.random.default_rng(11)
+    k, n = 8, 3000
+    R = rng.normal(0.0004, 0.01, size=(n, k))          # independientes
+    ind = [float(R[:, j].mean() / R[:, j].std(ddof=1) * np.sqrt(252)) for j in range(k)]
+    port = R.mean(axis=1)
+    sp = float(port.mean() / port.std(ddof=1) * np.sqrt(252))
+    teo = float(np.mean(ind) * np.sqrt(k))
+    assert abs(sp - teo) / max(abs(teo), 1e-9) < 0.15, \
+        f"cartera {sp:.2f} frente a teórico {teo:.2f}"
+    # con señales idénticas NO debe haber ganancia por diversificar
+    Rc = np.repeat(R[:, [0]], k, axis=1)
+    pc = Rc.mean(axis=1)
+    spc = float(pc.mean() / pc.std(ddof=1) * np.sqrt(252))
+    assert abs(spc - ind[0]) < 0.05, "inventa diversificación donde no la hay"
+    return (f"8 independientes: {np.mean(ind):.2f} -> {sp:.2f} (teórico {teo:.2f}); "
+            f"8 idénticas: sin ganancia")
+
+
 # ---------------------------------------------------------------------------
 # 3. Validación temporal
 # ---------------------------------------------------------------------------

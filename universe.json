@@ -8,10 +8,12 @@
       "anchor_intervals": ["30m", "1h"],
       "context_tickers": ["SPY", "QQQ", "^VIX", "TLT", "UUP", "GLD"]
     },
-    "label":      { "horizon": "close_next", "threshold_mode": "cost" },
-    "model":      { "n_trials": 40, "families": ["logit", "hgb", "extratrees", "mlp", "gru"] },
-    "validation": { "n_splits": 8, "n_permutations": 60, "min_train_days": 1000 },
-    "backtest":   { "prob_threshold": 0.55, "sizing": "confidence", "allow_short": true },
+    "label":      { "horizon": "close_next", "threshold_mode": "zero" },
+    "model":      { "n_trials": 24, "families": ["logit", "hgb", "extratrees", "mlp", "gru"] },
+    "validation": { "n_splits": 8, "n_permutations": 60, "min_train_days": 1000,
+                    "search_refit_folds": 3 },
+    "backtest":   { "sizing": "continuous", "continuous_gain": 1.75,
+                    "max_position": 0.35, "min_position": 0.02, "allow_short": true },
     "verbose": 1
   },
   "overrides": {

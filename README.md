@@ -4,7 +4,7 @@ Predicción direccional día-siguiente con ML/redes neuronales, **con las defens
 anti-sobreajuste puestas por delante del resultado**. Entrada a T−30′ del cierre
 americano para no regalarle el gap de apertura al mercado.
 
-Estado: **39/39 autodiagnósticos superados**.
+Estado: **41/41 autodiagnósticos superados**.
 
 ---
 
@@ -176,7 +176,7 @@ Si sale NO-GO, la señal se marca como *informativa, no operable*.
 
 ---
 
-## Prevención de bugs — 39 comprobaciones
+## Prevención de bugs — 41 comprobaciones
 
 ```
 features: el bloque BASE está desplazado un día
@@ -203,6 +203,8 @@ calibrador: se elige por validación, no a mano
 pesos de muestra: el decaimiento es relativo a cada fold
 selección de features: hay purga entre core y holdout
 ancla: se reescala a la escala de la serie diaria
+sizing: el modo continuo cosecha el centro y topa los extremos
+cartera: la diversificación se calcula bien
 reloj: se detecta el ancla prematura, no solo la tardía
 splits: purga y embargo se respetan
 splits: configuración incoherente aborta
@@ -365,6 +367,42 @@ hallazgos, algunos del tipo que no se detecta nunca porque no rompe nada:
     desajuste de datos que habría inflado el backtest en silencio. Ahora el
     ancla se lleva a la escala diaria usando el cierre de sesión como puente,
     lo que además anula splits y cualquier otra discrepancia de ajuste.
+
+## Sexta pasada: decisiones de diseño que mataban la señal
+
+Los hallazgos anteriores eran errores de cálculo. Estos son peores: el código
+hacía exactamente lo que le pedí, y lo que le pedí estaba mal.
+
+25. **El umbral descartaba el 88% de la señal.** Con `prob_threshold = 0.55`
+    solo se operaba cuando la probabilidad era extrema. Medido sobre datos
+    reales de ocho valores: **el 87-89% de las predicciones caen entre 0.40 y
+    0.60**, y ahí el acierto observado sigue de forma monótona al predicho
+    (2-3 puntos de spread, poco pero real y con miles de muestras). Las colas,
+    con 20-40 muestras por tramo, son ruido del calibrador — en AMZN el spread
+    de los extremos iba **del revés**. El sistema tiraba la señal buena y
+    operaba el ruido. Nuevo modo `sizing="continuous"`: posición proporcional a
+    (p − 0.5), sin umbral, con tope duro. Como efecto secundario baja el coste:
+    pasar de +0.20 a +0.25 solo paga por 0.05, no por entrada y salida enteras.
+26. **Tope de posición.** Sin él, un escalón del calibrador isotónico producía
+    posiciones de **−0.77x**. La peor pérdida diaria de AAPL venía de un
+    `prob_up = 0.1002` que era un artefacto con doce muestras detrás.
+27. **Los hiperparámetros se elegían en plena crisis financiera.** La búsqueda
+    corría una sola vez sobre el primer bloque de entrenamiento —2006-02-17 a
+    2009-11-17— y gobernaba el modelo hasta 2026. Un régimen con el VIX en 80
+    decidiendo la profundidad de los árboles para operar en 2024. Ahora se
+    rehace cada `search_refit_folds` folds, siempre con datos anteriores.
+28. **El objetivo de clasificación estaba desplazado.** Con
+    `threshold_mode="cost"` el modelo aprendía "¿sube más que los costes?"
+    mientras el sizing usaba el signo del movimiento: dos objetivos distintos
+    peleándose. Ahora aprende el signo y los costes se aplican en el backtest.
+29. **Nunca se evaluaba la cartera.** Cada modelo suelto tiene exposición baja
+    (~24%) y Sharpe pequeño, y así se juzgaban. Pero ocho señales con
+    correlación imperfecta valen más juntas que por separado, y combinadas usan
+    el capital casi todos los días. `scripts/portfolio_eval.py` mide el
+    conjunto y, sobre todo, **la correlación entre señales**, que es lo que
+    decide si la diversificación es real o una ilusión.
+30. **Menos búsqueda.** Con 40 configuraciones el PBO superaba 0.5 en cinco de
+    los ocho valores. Bajado a 24.
 
 ### El test que más importa
 

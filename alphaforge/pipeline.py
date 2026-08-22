@@ -570,7 +570,21 @@ def run_experiment(cfg: Config, md=None) -> ExperimentResult:
 
     # --- walk-forward
     preds, fold_metrics, importances = [], [], []
+    refit_every = max(1, cfg.validation.search_refit_folds)
     for sp in splits:
+        # Rebúsqueda periódica: unos hiperparámetros elegidos en 2008 no tienen
+        # por qué servir en 2024. Se rehace cada N folds usando SOLO el train de
+        # ese fold, así que sigue sin mirar el futuro.
+        if sp.fold > 0 and sp.fold % refit_every == 0:
+            try:
+                log.info(f"fold {sp.fold}: rebuscando hiperparámetros sobre "
+                         f"{len(sp.train)} días (hasta {sp.train_span[1].date()})")
+                sr = hyperparameter_search(Xa.iloc[sp.train], y_cls.iloc[sp.train],
+                                           y_ret.iloc[sp.train], w.iloc[sp.train], cfg)
+                best = {k: v for k, v in sr["best_by_family"].items()}
+            except Exception as e:                # noqa: BLE001
+                log.warning(f"fold {sp.fold}: rebúsqueda fallida, se conservan "
+                            f"los hiperparámetros anteriores ({e})")
         art = _train_fold(Xa, yv, rv, nv, wv, sp.train, cfg, best, sp.fold)
         p, q = _predict_fold(art, Xa, sp.test)
         block = pd.DataFrame({"prob_up": p}, index=Xa.index[sp.test])

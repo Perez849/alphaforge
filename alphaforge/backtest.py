@@ -36,6 +36,27 @@ def position_from_prob(p: pd.Series, cfg: Config,
     'kelly'      : Kelly fraccional con la magnitud esperada y la vol ex-ante
     """
     bt = cfg.backtest
+
+    # 'continuous': posición proporcional al exceso sobre 0.5, SIN umbral.
+    #
+    # Por qué existe este modo: con AUC ~0.52 la información no está en los
+    # extremos de la probabilidad, está repartida por toda la distribución.
+    # Medido sobre datos reales: el 87-89% de las predicciones caen entre 0.40
+    # y 0.60, y ahí el acierto observado sigue de forma monótona al predicho.
+    # Un umbral de 0.55 descarta esa masa entera y deja operando solo la cola,
+    # que con pocas muestras por tramo es sobre todo ruido del calibrador.
+    #
+    # Además baja el coste: si hoy la posición es +0.20 y mañana +0.25, solo se
+    # paga por el 0.05 de diferencia. Con umbral se paga entrada y salida
+    # completas cada vez.
+    if bt.sizing == "continuous":
+        edge = (p.astype(float) - 0.5) / 0.5           # -1 .. +1
+        pos = (edge * bt.continuous_gain).clip(-bt.max_position, bt.max_position)
+        if not bt.allow_short:
+            pos = pos.clip(lower=0.0)
+        dead = pos.abs() < bt.min_position             # ruido: no merece comisión
+        return pos.where(~dead, 0.0).fillna(0.0)
+
     thr = bt.prob_threshold
     long_sig = (p >= thr).astype(float)
     short_sig = (p <= 1 - thr).astype(float) if bt.allow_short else 0.0
@@ -56,7 +77,9 @@ def position_from_prob(p: pd.Series, cfg: Config,
     else:
         raise ValueError(f"sizing no soportado: {bt.sizing}")
 
-    return pd.Series(pos, index=p.index).clip(-bt.max_leverage, bt.max_leverage).fillna(0.0)
+    # tope duro: ninguna probabilidad extrema debe producir una apuesta enorme
+    cap = min(bt.max_leverage, bt.max_position)
+    return pd.Series(pos, index=p.index).clip(-cap, cap).fillna(0.0)
 
 
 def run_backtest(position: pd.Series, y_ret: pd.Series, cfg: Config,

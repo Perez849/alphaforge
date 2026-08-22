@@ -44,7 +44,11 @@ class LabelConfig:
     # Umbral de clasificación: 'zero' | 'cost' | 'vol'
     #   cost -> sube si y > coste_ida_y_vuelta
     #   vol  -> sube si y > k * sigma_t (banda neutra simétrica)
-    threshold_mode: str = "cost"
+    # 'zero': el modelo aprende "¿sube o baja?" y los costes se aplican después,
+    # en el backtest. Con 'cost' aprende una frontera desplazada que ya no
+    # coincide con el signo del movimiento, y el sizing sí usa el signo: dos
+    # objetivos distintos peleándose.
+    threshold_mode: str = "zero"
     neutral_band_k: float = 0.15          # solo si threshold_mode == 'vol'
     # ponderación de muestras
     time_decay_halflife_days: float = 750.0
@@ -75,7 +79,10 @@ class FeatureConfig:
 @dataclass
 class ModelConfig:
     families: tuple[str, ...] = ("logit", "hgb", "extratrees", "mlp", "gru")
-    n_trials: int = 60                    # búsqueda aleatoria de hiperparámetros
+    n_trials: int = 24                    # búsqueda aleatoria de hiperparámetros.
+                                          # Más pruebas = PBO más alto: medido sobre
+                                          # datos reales, 40 trials daban PBO > 0.5
+                                          # en 5 de 8 valores.
     max_features_selected: int = 40
     calibration: str = "isotonic"         # 'isotonic' | 'sigmoid' | 'none'
     quantiles: tuple[float, ...] = (0.1, 0.5, 0.9)
@@ -90,6 +97,7 @@ class ValidationConfig:
     purge_days: int = 3                   # >= horizonte + 1
     embargo_pct: float = 0.01
     min_train_days: int = 1000
+    search_refit_folds: int = 3           # rehacer la búsqueda cada N folds
     anchored: bool = True                 # train expansivo (True) o rolling (False)
     # Diagnóstico de overfitting
     cscv_blocks: int = 12                 # S en el algoritmo CSCV (par)
@@ -105,8 +113,12 @@ class BacktestConfig:
     commission_bps: float = 0.5           # por lado
     spread_bps: float = 1.0               # medio spread por lado
     slippage_bps: float = 1.0             # impacto por lado
-    prob_threshold: float = 0.55          # umbral de entrada
-    sizing: str = "confidence"            # 'binary' | 'confidence' | 'kelly'
+    prob_threshold: float = 0.55          # umbral de entrada (no usado en 'continuous')
+    sizing: str = "continuous"            # 'continuous' | 'binary' | 'confidence' | 'kelly'
+    continuous_gain: float = 1.75         # satura en p=0.60, donde la calibración
+                                          # deja de tener muestras suficientes
+    max_position: float = 0.35            # tope duro: nada de apuestas por artefactos
+    min_position: float = 0.02            # por debajo, la comisión se come el edge
     kelly_fraction: float = 0.25
     max_leverage: float = 1.0
     allow_short: bool = True
@@ -177,6 +189,10 @@ class Config:
             errs.append("validation.cscv_blocks < 6 hace el PBO inestable.")
         if not 0.5 <= self.backtest.prob_threshold < 1.0:
             errs.append("backtest.prob_threshold debe estar en [0.5, 1).")
+        if not 0 < self.backtest.max_position <= 2.0:
+            errs.append("backtest.max_position fuera de rango (0, 2].")
+        if self.backtest.min_position >= self.backtest.max_position:
+            errs.append("min_position debe ser menor que max_position.")
         if self.data.anchor_offset_min <= 0 or self.data.anchor_offset_min > 180:
             errs.append("data.anchor_offset_min fuera de rango razonable (1-180).")
         if self.model.n_trials < 5:
