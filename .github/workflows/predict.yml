@@ -1,0 +1,75 @@
+name: Señales diarias
+
+on:
+  schedule:
+    # El cron de GitHub es UTC y arranca con retraso variable (1-20 min).
+    # 15:00 ET son las 19:00 UTC en horario de verano y las 20:00 en invierno.
+    # Se lanzan los dos; el script comprueba la hora real de Nueva York y el que
+    # no toca sale con código 78 (neutro, no cuenta como fallo).
+    - cron: '45 18 * * 1-5'
+    - cron: '45 19 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Ejecutar aunque el mercado esté cerrado'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: senales-diarias
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Resolver las predicciones de días anteriores
+        continue-on-error: true
+        run: python scripts/reconcile.py --out docs/data
+
+      - name: Calcular las señales de hoy
+        id: predecir
+        run: |
+          set +e
+          python scripts/predict_daily.py \
+            --universe universe.json --models models --out docs/data \
+            --wait --wait-max 90 \
+            ${{ inputs.force && '--force' || '' }}
+          code=$?
+          # 78 = fuera de sesión (festivo o cron equivocado): no es un fallo
+          if [ $code -eq 78 ]; then
+            echo "Fuera de sesión de mercado; nada que publicar."
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          exit $code
+
+      - name: Publicar
+        if: steps.predecir.outputs.skip != 'true'
+        run: |
+          git config user.name  "alphaforge-bot"
+          git config user.email "actions@github.com"
+          git add docs/data
+          git diff --staged --quiet && echo "sin cambios" && exit 0
+          git commit -m "señales $(date -u +%Y-%m-%d)"
+          # el remoto puede haber avanzado (el otro workflow, o un commit tuyo):
+          # sin rebase el push falla y el día se pierde en silencio
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+              git push && exit 0
+            echo "reintento $i..."; sleep $((i * 5))
+          done
+          echo "::error::no se pudo publicar tras 3 intentos"; exit 1
