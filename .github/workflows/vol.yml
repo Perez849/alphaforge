@@ -1,0 +1,127 @@
+name: Volatilidad
+
+# Predice volatilidad y la enfrenta a HAR-RV. Un job por combinación de valor y
+# horizonte, todos a la vez: con 8 valores y 2 horizontes son 16 jobs y tarda lo
+# que el más lento.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: 'Tickers separados por comas (vacío = los del universo)'
+        type: string
+      horizons:
+        description: 'Horizontes en días, separados por comas'
+        type: string
+        default: '1,5'
+      estimator:
+        description: 'Estimador de volatilidad'
+        type: choice
+        options: [yang_zhang, garman_klass, parkinson, rogers_satchell]
+        default: yang_zhang
+  schedule:
+    - cron: '0 8 * * 6'          # sábados, después del reentrenamiento direccional
+
+permissions:
+  contents: write
+
+concurrency:
+  group: volatilidad
+  cancel-in-progress: false
+
+jobs:
+  preparar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    outputs:
+      combos: ${{ steps.lista.outputs.combos }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Autodiagnóstico
+        run: python -m alphaforge selftest      # si falla, no se entrena nada
+
+      - name: Preparar valores x horizontes
+        id: lista
+        run: |
+          python - <<'EOF' >> $GITHUB_OUTPUT
+          import json, os
+          only = os.environ.get("TICKERS", "").strip()
+          tickers = ([x.strip().upper() for x in only.split(",") if x.strip()]
+                     if only else json.load(open("universe.json"))["tickers"])
+          hz = [int(x) for x in (os.environ.get("HZ") or "1,5").split(",") if x.strip()]
+          print("combos=" + json.dumps(
+              [{"ticker": t, "horizon": h} for t in tickers for h in hz]))
+          EOF
+        env:
+          TICKERS: ${{ inputs.tickers }}
+          HZ: ${{ inputs.horizons }}
+
+  medir:
+    needs: preparar
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        combo: ${{ fromJson(needs.preparar.outputs.combos) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: ${{ matrix.combo.ticker }} a ${{ matrix.combo.horizon }} día(s)
+        run: |
+          mkdir -p part
+          python scripts/train_vol.py \
+            --tickers "${{ matrix.combo.ticker }}" \
+            --horizon ${{ matrix.combo.horizon }} \
+            --estimator "${{ inputs.estimator || 'yang_zhang' }}" \
+            --out "part/vol_${{ matrix.combo.ticker }}_h${{ matrix.combo.horizon }}.json"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vol-${{ matrix.combo.ticker }}-h${{ matrix.combo.horizon }}
+          path: part/*.json
+          if-no-files-found: warn
+          retention-days: 3
+
+  publicar:
+    needs: medir
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: vol-*
+
+      - name: Consolidar y resumir
+        run: python scripts/merge_vol.py --parts artifacts --out docs/data/volatility.json
+
+      - name: Publicar
+        run: |
+          git config user.name  "alphaforge-bot"
+          git config user.email "actions@github.com"
+          git add docs/data
+          git diff --staged --quiet && echo "sin cambios" && exit 0
+          git commit -m "volatilidad $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin
