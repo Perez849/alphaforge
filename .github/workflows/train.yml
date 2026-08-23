@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     outputs:
-      tickers: ${{ steps.lista.outputs.tickers }}
+      combos: ${{ steps.lista.outputs.combos }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -42,17 +42,18 @@ jobs:
       - name: Autodiagnóstico
         run: python -m alphaforge selftest      # si falla, no se entrena nada
 
-      - name: Preparar la lista de valores
+      - name: Preparar la lista de valores x variantes
         id: lista
         run: |
           python - <<'EOF' >> $GITHUB_OUTPUT
           import json, os
+          u = json.load(open("universe.json"))
           only = os.environ.get("ONLY", "").strip()
-          if only:
-              t = [x.strip().upper() for x in only.split(",") if x.strip()]
-          else:
-              t = json.load(open("universe.json"))["tickers"]
-          print("tickers=" + json.dumps(t))
+          tickers = ([x.strip().upper() for x in only.split(",") if x.strip()]
+                     if only else u["tickers"])
+          variants = list(u.get("variants") or {"close": {}})
+          combos = [{"ticker": t, "variant": v} for t in tickers for v in variants]
+          print("combos=" + json.dumps(combos))
           EOF
         env:
           ONLY: ${{ inputs.only }}
@@ -64,9 +65,9 @@ jobs:
     timeout-minutes: 90
     strategy:
       fail-fast: false           # que un valor falle no debe tumbar el resto
-      max-parallel: 10
+      max-parallel: 20
       matrix:
-        ticker: ${{ fromJson(needs.preparar.outputs.tickers) }}
+        combo: ${{ fromJson(needs.preparar.outputs.combos) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -75,18 +76,19 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
 
-      - name: Entrenar ${{ matrix.ticker }}
+      - name: Entrenar ${{ matrix.combo.ticker }} (${{ matrix.combo.variant }})
         run: |
           python scripts/train_all.py \
             --universe universe.json --out models \
-            --only "${{ matrix.ticker }}" \
+            --only "${{ matrix.combo.ticker }}" \
+            --variant "${{ matrix.combo.variant }}" \
             --skip-fresh-days ${{ inputs.force && '0' || '5' }} \
             --part-out "part"
 
       - name: Guardar el trozo
         uses: actions/upload-artifact@v4
         with:
-          name: parte-${{ matrix.ticker }}
+          name: parte-${{ matrix.combo.ticker }}-${{ matrix.combo.variant }}
           path: |
             part/summary.json
             models/*.pkl
