@@ -82,11 +82,7 @@ jobs:
       - name: ${{ matrix.combo.ticker }} a ${{ matrix.combo.horizon }} día(s)
         run: |
           mkdir -p part
-          python scripts/train_vol.py \
-            --tickers "${{ matrix.combo.ticker }}" \
-            --horizon ${{ matrix.combo.horizon }} \
-            --estimator "${{ inputs.estimator || 'yang_zhang' }}" \
-            --out "part/vol_${{ matrix.combo.ticker }}_h${{ matrix.combo.horizon }}.json"
+          python scripts/train_vol.py --tickers "${{ matrix.combo.ticker }}" --horizon ${{ matrix.combo.horizon }} --estimator "${{ inputs.estimator || 'yang_zhang' }}" --out "part/vol_${{ matrix.combo.ticker }}_h${{ matrix.combo.horizon }}.json"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -123,5 +119,15 @@ jobs:
           git add docs/data
           git diff --staged --quiet && echo "sin cambios" && exit 0
           git commit -m "volatilidad $(date -u +%Y-%m-%d)"
+          # sin continuaciones de línea: una barra invertida con un espacio
+          # detrás rompe el script entero con "unexpected end of file"
           for i in 1 2 3; do
-            git pull --rebase --autostash origin
+            if git pull --rebase --autostash origin "$GITHUB_REF_NAME" && git push; then
+              echo "publicado"
+              exit 0
+            fi
+            echo "reintento $i..."
+            sleep $((i * 5))
+          done
+          echo "::error::no se pudo publicar tras 3 intentos"
+          exit 1
