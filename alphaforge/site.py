@@ -94,6 +94,10 @@ def oos_summary(res, max_recent: int = 120) -> dict:
             "cagr": _r(m.get("cagr"), 4), "max_dd": _r(m.get("max_dd"), 4),
             "hit_rate": _r(m.get("hit_rate"), 4),
             "directional_accuracy": _r(m.get("directional_accuracy"), 4),
+            # El listón real: qué fracción de días sube el valor. Sin esto, un
+            # 56% de acierto parece señal cuando la tasa base ya es del 56%.
+            "base_rate_up": _r(m.get("base_rate_up"), 4),
+            "edge_over_base": _r(m.get("edge_over_base"), 4),
             "profit_factor": _r(m.get("profit_factor"), 2),
             "n_trades": int(act.sum()), "exposure": _r(m.get("exposure"), 3),
             "total_return": _r(m.get("total_return"), 4),

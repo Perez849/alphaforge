@@ -31,6 +31,12 @@ def make_ohlcv(n: int = 3000, seed: int = 0, start: str = "2012-01-03",
                         hasta el ancla: reversión intradía->overnight
       'momentum'     -> depende (+) del momentum de 5 días
       'regime'       -> la señal solo existe cuando la volatilidad es alta
+      'leverage'     -> efecto apalancamiento: las caídas elevan la volatilidad
+                        de mañana más que las subidas. Es asimetría real de los
+                        mercados y HAR NO la captura, porque solo mira niveles
+                        pasados de volatilidad, no el signo de los retornos.
+                        Sirve para comprobar que el modelo de volatilidad sabe
+                        encontrar lo que el benchmark deja fuera.
     """
     rng = np.random.default_rng(seed)
     idx = pd.bdate_range(start=start, periods=n)
@@ -64,6 +70,11 @@ def make_ohlcv(n: int = 3000, seed: int = 0, start: str = "2012-01-03",
         elif signal == "regime":
             hot = 1.0 if sig[t] > np.median(sig[:max(t, 30)]) else 0.0
             extra = -signal_strength * hot * prev_state * sig[t]
+        elif signal == "leverage" and t >= 2:
+            # una caída ayer amplifica la volatilidad de hoy
+            ayer = close[t - 1] / close[t - 2] - 1
+            if ayer < 0:
+                sig[t] = sig[t] * (1.0 + signal_strength * min(abs(ayer) / 0.02, 3.0))
 
         r_total = mu + eps[t] + extra
         close[t] = close[t - 1] * (1 + r_total)

@@ -847,6 +847,95 @@ def _t_noise():
 
 
 # ---------------------------------------------------------------------------
+# 8. Volatilidad
+# ---------------------------------------------------------------------------
+@check("volatilidad: los estimadores OHLC baten al cierre-a-cierre")
+def _t_vol_estimators():
+    from alphaforge.volatility import ESTIMATORS, realized_vol
+    md = make_market_data(n=2000, seed=61, with_context=False)
+    d = md.daily
+    fut = np.log(d["Close"]).diff().rolling(21).std().shift(-21)
+    lf = np.log(fut.clip(lower=1e-5))
+    cc = np.log(np.log(d["Close"]).diff().abs().clip(lower=1e-5))
+    base = float(cc.rolling(5).mean().corr(lf))
+    best = {}
+    for name in ESTIMATORS:
+        c = float(np.log(realized_vol(d, name)).rolling(5).mean().corr(lf))
+        best[name] = c
+    yz = best["yang_zhang"]
+    assert yz > base, f"Yang-Zhang ({yz:.3f}) no mejora al cierre-a-cierre ({base:.3f})"
+    assert all(v > 0.3 for v in best.values()), f"algún estimador sin señal: {best}"
+    return (f"Yang-Zhang corr={yz:.3f} frente a {base:.3f} del cierre-a-cierre; "
+            f"{len(best)} estimadores disponibles")
+
+
+@check("volatilidad: HAR-RV se ajusta y predice de forma sensata")
+def _t_har():
+    from alphaforge.volatility import HARModel, build_vol_target, r2_oos, mincer_zarnowitz
+    md = make_market_data(n=2500, seed=62, with_context=False)
+    t = build_vol_target(md.daily, 1, "yang_zhang")
+    m = t.mask.to_numpy()
+    X, y = t.har_design[m], t.log_rv_next[m]
+    cut = int(0.7 * len(X))
+    har = HARModel().fit(X.iloc[:cut], y.iloc[:cut])
+    p = har.predict(X.iloc[cut:])
+    yy = y.iloc[cut:].to_numpy()
+    r2 = r2_oos(yy, p, np.full(len(yy), y.iloc[:cut].mean()))
+    assert r2 > 0.10, f"HAR con R2 de solo {r2:.3f}: el benchmark no funciona"
+    mz = mincer_zarnowitz(yy, p)
+    assert 0.6 < mz["beta"] < 1.4, f"HAR mal escalado (beta={mz['beta']:.2f})"
+    assert (har.coef[2] + har.coef[3]) > har.coef[1], \
+        "HAR: los términos semanal y mensual deberían pesar más que el diario"
+    return f"R2 OOS={r2:.3f}, beta Mincer-Zarnowitz={mz['beta']:.3f}"
+
+
+@check("volatilidad: sin fuga temporal en el objetivo")
+def _t_vol_leak():
+    from alphaforge.volatility import build_vol_target, realized_vol
+    md = make_market_data(n=1200, seed=63, with_context=False)
+    t = build_vol_target(md.daily, 1, "yang_zhang")
+    rv = realized_vol(md.daily, "yang_zhang")
+    # el objetivo de t debe ser exactamente la volatilidad de t+1
+    exp = np.log(rv.shift(-1))
+    d = (exp - t.log_rv_next).abs().dropna()
+    assert d.max() < 1e-10, f"objetivo mal alineado ({d.max():.2e})"
+    # los regresores HAR NO pueden contener el futuro
+    assert abs(t.har_design["d"].iloc[-1] - np.log(rv.iloc[-1])) < 1e-10, \
+        "el regresor diario de HAR no usa la información de hoy"
+    assert not np.isfinite(t.log_rv_next.iloc[-1]) or not t.mask.iloc[-1], \
+        "la última fila tiene objetivo: eso es futuro que no existe"
+    return "objetivo = RV(t+1) exacto; regresores HAR solo con datos hasta t"
+
+
+@check("VOLATILIDAD: encuentra lo que HAR no ve, y solo si existe")
+def _t_vol_experiment():
+    """Las dos caras: con asimetría inyectada debe batir a HAR; con volatilidad
+    autorregresiva pura debe quedarse en HAR y no inventarse mejoras."""
+    from alphaforge.volatility import run_vol_experiment
+    cfg = Config()
+    cfg.verbose = 0
+    cfg.features.cross_asset = False
+    cfg.features.monthly = False
+    cfg.validation.n_splits = 5
+    cfg.validation.min_train_days = 800
+
+    md = make_market_data(n=2600, seed=64, signal="leverage",
+                          signal_strength=1.2, with_context=False)
+    con = run_vol_experiment(md, cfg, horizon=1).metrics
+    assert con["r2_vs_har"] > 0.01, \
+        f"con asimetría inyectada solo mejora {con['r2_vs_har']:.4f} sobre HAR"
+    assert con["dm_pvalue"] < 0.10, f"la mejora no sale significativa (p={con['dm_pvalue']:.3f})"
+
+    md2 = make_market_data(n=2600, seed=64, signal="none", with_context=False)
+    sin = run_vol_experiment(md2, cfg, horizon=1).metrics
+    assert sin["r2_vs_har"] < 0.02, \
+        f"inventa una mejora de {sin['r2_vs_har']:.4f} sobre volatilidad AR pura"
+    assert sin["har_r2_vs_media"] > 0.10, "el benchmark HAR no está funcionando"
+    return (f"con asimetría: +{con['r2_vs_har']:.3f} sobre HAR (p={con['dm_pvalue']:.4f}); "
+            f"sin ella: {sin['r2_vs_har']:+.3f}")
+
+
+# ---------------------------------------------------------------------------
 # Runner
 # ---------------------------------------------------------------------------
 def run_all(verbose: bool = True, stop_on_fail: bool = False) -> list[CheckResult]:

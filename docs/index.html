@@ -326,9 +326,11 @@ function renderDetail(){
      ${t.n_configs_tried} configuraciones probadas</p>
 
    <div class="cards">
-     <div class="card"><div class="k">Acierto direccional</div>
-       <div class="v">${pct(h.directional_accuracy)}</div>
-       <div class="n">50% = moneda al aire</div></div>
+     <div class="card"><div class="k">Ventaja sobre la base</div>
+       <div class="v ${(h.edge_over_base||0)>0?"long-c":"short-c"}">
+         ${h.edge_over_base==null?"—":((h.edge_over_base>=0?"+":"")+(100*h.edge_over_base).toFixed(2)+"pp")}</div>
+       <div class="n">acierto ${pct(h.directional_accuracy)} vs.
+         ${pct(h.base_rate_up)} de días al alza</div></div>
      <div class="card"><div class="k">Sharpe</div><div class="v">${num(h.sharpe)}</div>
        <div class="n">corregido por solape (bruto ${num(h.sharpe_raw)}) ·
          B&amp;H ${num(h.bh_sharpe)}</div></div>

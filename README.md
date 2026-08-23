@@ -4,7 +4,7 @@ Predicción direccional día-siguiente con ML/redes neuronales, **con las defens
 anti-sobreajuste puestas por delante del resultado**. Entrada a T−30′ del cierre
 americano para no regalarle el gap de apertura al mercado.
 
-Estado: **41/41 autodiagnósticos superados**.
+Estado: **45/45 autodiagnósticos superados**.
 
 ---
 
@@ -176,7 +176,7 @@ Si sale NO-GO, la señal se marca como *informativa, no operable*.
 
 ---
 
-## Prevención de bugs — 41 comprobaciones
+## Prevención de bugs — 45 comprobaciones
 
 ```
 features: el bloque BASE está desplazado un día
@@ -199,6 +199,10 @@ cotización: precios imposibles se rechazan
 modelo de producción: se entrena con el histórico completo
 snapshot: se avisa cuando la fila de hoy no es fiable
 ensemble: la mezcla se hace en el mismo espacio en que se pesó
+volatilidad: los estimadores OHLC baten al cierre-a-cierre
+volatilidad: HAR-RV se ajusta y predice de forma sensata
+volatilidad: sin fuga temporal en el objetivo
+VOLATILIDAD: encuentra lo que HAR no ve, y solo si existe
 calibrador: se elige por validación, no a mano
 pesos de muestra: el decaimiento es relativo a cada fold
 selección de features: hay purga entre core y holdout
@@ -431,6 +435,49 @@ hacía exactamente lo que le pedí, y lo que le pedí estaba mal.
 
     También entran HYG, LQD y ^TNX: el estrés suele aparecer antes en crédito y
     tipos que en la renta variable.
+
+## Predicción de volatilidad
+
+```bash
+python scripts/train_vol.py --tickers AAPL,MSFT,SPY --horizon 1
+python scripts/train_vol.py --universe universe.json --horizon 5
+```
+
+La dirección diaria de una megacap es la variable menos predecible que existe
+con datos públicos: medido en este mismo sistema, ventaja sobre la tasa base de
+**+0,03 pp con z≈0,1** en dos horizontes distintos. La volatilidad es lo
+contrario: persistente, agrupada y con R² de 0,3-0,5. No es una diferencia de
+grado, es de naturaleza.
+
+**El listón no es acertar: es batir a HAR-RV.** Tres regresores —volatilidad de
+ayer, de la última semana y del último mes— que llevan quince años resistiendo
+a modelos mucho más complicados. Un R² de 0,45 suena estupendo hasta que
+descubres que HAR da 0,47.
+
+**Estimadores.** Con OHLCV diario se estima la volatilidad de un día mucho mejor
+que con el retorno cierre-a-cierre, que desperdicia todo el recorrido intradía:
+Parkinson (~5x más eficiente), Garman-Klass (~7x), Rogers-Satchell y Yang-Zhang,
+el mejor con datos OHLC y el que se usa por defecto. Medido: correlación de
+0,614 con la volatilidad futura frente a 0,446 del cierre-a-cierre.
+
+**El ML predice el residuo de HAR, no el nivel.** Pedirle el nivel es pedirle
+que redescubra por su cuenta lo que HAR resuelve con tres regresores, y con 158
+features acaba diluyendo esa señal: en pruebas, peor que HAR en los seis folds.
+Modelando el residuo parte desde HAR y solo puede añadir lo que HAR no capture.
+Cuánto fiarse de esa corrección se estima con datos —en el tramo final del
+train, no visto por los modelos—, así que si el ML no aporta el peso se va a
+cero y el resultado es HAR intacto. Por construcción no puede quedar peor.
+
+**Métricas.** R² fuera de muestra contra la media y contra HAR, QLIKE (pérdida
+robusta para volatilidad, Patton 2011), Diebold-Mariano para contrastar si la
+diferencia frente a HAR es real o ruido, y Mincer-Zarnowitz para comprobar el
+escalado de la predicción.
+
+Comportamiento verificado en las dos direcciones: con asimetría inyectada
+(caídas que elevan la volatilidad, algo que HAR no ve porque solo mira niveles
+pasados) mejora **+0,099 de R² sobre HAR con p<0,0001**; con volatilidad
+autorregresiva pura se queda en **−0,004** y da NO-GO. Encuentra lo que hay y
+no se inventa lo que no.
 
 ## Variantes: probar hipótesis en paralelo
 
