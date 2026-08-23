@@ -88,14 +88,53 @@ def wait_for_anchor(offset_min: int, wait_max_min: float = 90.0,
     return clock
 
 
-def load_model(models_dir: str, ticker: str) -> dict | None:
+def pick_variant(models_dir: str, ticker: str, variants: list[str],
+                 site_dir: str, log) -> str | None:
+    """De todas las variantes entrenadas para un valor, coge la que ganó.
+
+    Si el backtest ya nombró ganadora, se respeta. Si no, se prefiere el mejor
+    veredicto y, en empate, la variante por defecto.
+    """
+    import json as _json
+    path = os.path.join(site_dir, "backtest.json")
+    disponibles = []
+    for v in variants:
+        f = os.path.join(models_dir, _model_file(ticker, v))
+        if os.path.exists(f):
+            disponibles.append(v)
+    if not disponibles:
+        return None
+    if len(disponibles) == 1:
+        return disponibles[0]
+    try:
+        with open(path) as f:
+            models = _json.load(f).get("models", {})
+        for v in disponibles:
+            key = ticker if v == "close" else f"{ticker}::{v}"
+            if models.get(key, {}).get("variant_winner"):
+                return v
+        rank = {"GO": 2, "REVISAR": 1, "NO-GO": 0}
+        disponibles.sort(key=lambda v: -rank.get(
+            models.get(ticker if v == "close" else f"{ticker}::{v}", {})
+            .get("verdict", "NO-GO"), 0))
+    except Exception as e:                                 # noqa: BLE001
+        log.debug(f"{ticker}: sin comparación de variantes ({e})")
+    return disponibles[0]
+
+
+def _model_file(ticker: str, variant: str | None) -> str:
+    t = ticker.replace(".", "_")
+    return f"{t}.pkl" if not variant or variant == "close" else f"{t}__{variant}.pkl"
+
+
+def load_model(models_dir: str, ticker: str, variant: str | None = None) -> dict | None:
     """Carga un modelo y rechaza los de formato antiguo.
 
     Un .pkl de una versión anterior no falla al abrirse: falla más tarde, de
     formas raras y silenciosas, en mitad de una predicción. Mejor abortar aquí.
     """
     from alphaforge import ARTIFACT_FORMAT
-    p = os.path.join(models_dir, f"{ticker.replace('.', '_')}.pkl")
+    p = os.path.join(models_dir, _model_file(ticker, variant))
     if not os.path.exists(p):
         return None
     with open(p, "rb") as f:
@@ -110,6 +149,7 @@ def load_model(models_dir: str, ticker: str) -> dict | None:
 
 # ---------------------------------------------------------------------------
 def predict_one(ticker: str, blob: dict, verbose: int = 1) -> dict:
+    """Señal de un valor usando el modelo ya entrenado y el precio del momento."""
     """Señal de un valor usando el modelo ya entrenado y el precio del momento."""
     cfg = Config.from_dict(blob["cfg"])
     cfg.data.ticker = ticker
@@ -156,6 +196,7 @@ def predict_one(ticker: str, blob: dict, verbose: int = 1) -> dict:
     m = blob.get("metrics", {})
     return {
         "ticker": ticker,
+        "variant": blob.get("variant", "close"),
         "health": health,
         "as_of": str(row.index[-1].date()),
         "anchor_price": round(float(quote.price), 4),
@@ -233,7 +274,9 @@ def main() -> int:
     signals, errors = [], []
     for t in uni["tickers"]:
         try:
-            blob = load_model(args.models, t)
+            v = pick_variant(args.models, t, list(uni.get("variants", {"close": {}})),
+                             args.out, log)
+            blob = load_model(args.models, t, v)
         except RuntimeError as e:
             errors.append({"ticker": t, "error": "modelo obsoleto"})
             log.error(str(e))
@@ -247,7 +290,8 @@ def main() -> int:
             signals.append(s)
             warn = "  ! " + "; ".join(s["health"]["warnings"]) if \
                 s["health"].get("warnings") else ""
-            log.info(f"{t:8s} P(sube)={100 * s['prob_up']:5.1f}%  "
+            log.info(f"{t:8s}[{s.get('variant', 'close'):5s}] "
+                     f"P(sube)={100 * s['prob_up']:5.1f}%  "
                      f"E[ret]={100 * (s['expected_return'] or 0):+.2f}%  "
                      f"{s['direction']:6s} [{s['verdict']}]{warn}")
         except StaleQuoteError as e:

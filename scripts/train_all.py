@@ -35,14 +35,39 @@ def load_universe(path: str) -> dict:
     return u
 
 
-def build_config(uni: dict, ticker: str) -> Config:
-    cfg = Config.from_dict(uni.get("config", {}))
-    cfg.data.ticker = ticker
-    for k, v in (uni.get("overrides", {}).get(ticker, {})).items():
+def _apply(cfg: Config, overrides: dict) -> Config:
+    for k, v in (overrides or {}).items():
+        if k.startswith("_"):
+            continue
         section, _, field = k.partition(".")
         if field and hasattr(cfg, section):
             setattr(getattr(cfg, section), field, v)
     return cfg
+
+
+def build_config(uni: dict, ticker: str, variant: str | None = None) -> Config:
+    """Configuración de un valor, opcionalmente bajo una variante.
+
+    Una variante es una hipótesis distinta sobre el MISMO valor: por ejemplo,
+    capturar el gap nocturno en vez de la sesión entera. Se entrenan a la vez
+    para poder compararlas con el mismo código y los mismos datos, que es la
+    única forma de que la comparación signifique algo.
+    """
+    cfg = Config.from_dict(uni.get("config", {}))
+    cfg.data.ticker = ticker
+    if variant:
+        cfg = _apply(cfg, uni.get("variants", {}).get(variant, {}))
+    cfg = _apply(cfg, uni.get("overrides", {}).get(ticker, {}))
+    return cfg
+
+
+def model_key(ticker: str, variant: str | None) -> str:
+    return ticker if not variant or variant == "close" else f"{ticker}::{variant}"
+
+
+def model_file(ticker: str, variant: str | None) -> str:
+    t = ticker.replace(".", "_")
+    return f"{t}.pkl" if not variant or variant == "close" else f"{t}__{variant}.pkl"
 
 
 def main() -> int:
@@ -54,6 +79,8 @@ def main() -> int:
                     help="no reentrenar si el modelo tiene menos de N días")
     ap.add_argument("--site-data", default="docs/data",
                     help="dónde publicar el resumen de fiabilidad para la web")
+    ap.add_argument("--variant", default=None,
+                    help="variante a entrenar (clave de 'variants' en el universo)")
     ap.add_argument("--part-out", default=None,
                     help="volcar el resultado como trozo suelto (ejecución en "
                          "paralelo); no toca docs/data")
@@ -75,29 +102,36 @@ def main() -> int:
                 summaries = json.load(f).get("models", {})
         except Exception as e:                       # noqa: BLE001
             log.warning(f"backtest.json previo ilegible ({e})")
+    variant = args.variant
+    if variant and variant not in uni.get("variants", {}):
+        log.warning(f"variante '{variant}' no definida en {args.universe}")
     for i, t in enumerate(tickers, 1):
-        path = os.path.join(args.out, f"{t.replace('.', '_')}.pkl")
+        key = model_key(t, variant)
+        path = os.path.join(args.out, model_file(t, variant))
         if os.path.exists(path) and args.skip_fresh_days > 0:
             age = (time.time() - os.path.getmtime(path)) / 86400
             if age < args.skip_fresh_days:
-                log.info(f"[{i}/{len(tickers)}] {t}: modelo de hace {age:.1f}d, se omite")
+                log.info(f"[{i}/{len(tickers)}] {key}: modelo de hace {age:.1f}d, se omite")
                 continue
 
-        log.info(f"[{i}/{len(tickers)}] entrenando {t}...")
+        log.info(f"[{i}/{len(tickers)}] entrenando {key}...")
         t0 = time.time()
         try:
-            cfg = build_config(uni, t)
+            cfg = build_config(uni, t, variant)
             res = run_experiment(cfg)
             with open(path, "wb") as f:
                 pickle.dump({"format": ARTIFACT_FORMAT, "version": __version__,
+                             "variant": variant or "close", "ticker": t,
                              "cfg": cfg.to_dict(), "final": res.final_model,
                              "verdict": res.verdict,
                              "metrics": _jsonable(res.metrics)}, f)
             if uni.get("save_reports", True):
                 save_artifacts(res, os.path.join(args.out, "reports"))
-            summaries[t] = oos_summary(res)
+            summaries[key] = oos_summary(res)
+            summaries[key]["variant"] = variant or "close"
+            summaries[key]["base_ticker"] = t
             entry = {
-                "ticker": t,
+                "ticker": key, "base_ticker": t, "variant": variant or "close",
                 "trained_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                 "verdict": res.verdict["decision"],
                 "sharpe": res.metrics.get("sharpe"),
@@ -110,13 +144,13 @@ def main() -> int:
                 "seconds": round(time.time() - t0, 1),
             }
             index.append(_jsonable(entry))
-            log.info(f"    {t}: {entry['verdict']} | Sharpe "
+            log.info(f"    {key}: {entry['verdict']} | Sharpe "
                      f"{entry['sharpe']:.2f} | {entry['seconds']:.0f}s"
-                     if entry["sharpe"] else f"    {t}: {entry['verdict']}")
+                     if entry["sharpe"] else f"    {key}: {entry['verdict']}")
         except Exception as e:                       # noqa: BLE001
-            log.error(f"    {t} FALLÓ: {type(e).__name__}: {e}")
+            log.error(f"    {key} FALLÓ: {type(e).__name__}: {e}")
             traceback.print_exc()
-            failures.append({"ticker": t, "error": f"{type(e).__name__}: {e}"})
+            failures.append({"ticker": key, "error": f"{type(e).__name__}: {e}"})
 
     manifest = {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),

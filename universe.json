@@ -1,22 +1,80 @@
 {
-  "tickers": ["SPY", "QQQ", "AAPL", "MSFT", "NVDA", "AMZN", "META", "GOOGL"],
+  "tickers": [
+    "SPY",
+    "QQQ",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "META",
+    "GOOGL"
+  ],
   "save_reports": true,
   "config": {
     "data": {
       "start": "2006-01-01",
       "anchor_offset_min": 60,
-      "anchor_intervals": ["30m", "1h"],
-      "context_tickers": ["SPY", "QQQ", "^VIX", "TLT", "UUP", "GLD"]
+      "anchor_intervals": [
+        "30m",
+        "1h"
+      ],
+      "context_tickers": [
+        "SPY",
+        "QQQ",
+        "^VIX",
+        "TLT",
+        "UUP",
+        "GLD",
+        "^VIX9D",
+        "^VIX3M",
+        "^VVIX",
+        "^SKEW",
+        "HYG",
+        "LQD",
+        "^TNX"
+      ]
     },
-    "label":      { "horizon": "close_next", "threshold_mode": "zero" },
-    "model":      { "n_trials": 24, "families": ["logit", "hgb", "extratrees", "mlp", "gru"] },
-    "validation": { "n_splits": 8, "n_permutations": 60, "min_train_days": 1000,
-                    "search_refit_folds": 3 },
-    "backtest":   { "sizing": "continuous", "continuous_gain": 1.75,
-                    "max_position": 0.35, "min_position": 0.02, "allow_short": true },
+    "label": {
+      "horizon": "close_next",
+      "threshold_mode": "zero"
+    },
+    "model": {
+      "n_trials": 24,
+      "families": [
+        "logit",
+        "hgb",
+        "extratrees",
+        "mlp",
+        "gru"
+      ]
+    },
+    "validation": {
+      "n_splits": 8,
+      "n_permutations": 60,
+      "min_train_days": 1000,
+      "search_refit_folds": 3
+    },
+    "backtest": {
+      "sizing": "continuous",
+      "continuous_gain": 1.75,
+      "max_position": 0.35,
+      "min_position": 0.02,
+      "allow_short": true
+    },
     "verbose": 1
   },
   "overrides": {
-    "SPY": { "backtest.allow_short": false }
+    "SPY": {
+      "backtest.allow_short": false
+    }
+  },
+  "variants": {
+    "close": {
+      "_desc": "ancla T-60 -> cierre del día siguiente (gap + sesión entera)"
+    },
+    "gap": {
+      "_desc": "ancla T-60 -> APERTURA del día siguiente (solo el tramo nocturno)",
+      "label.horizon": "open_next"
+    }
   }
 }

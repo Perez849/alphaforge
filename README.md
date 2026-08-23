@@ -404,6 +404,60 @@ hacía exactamente lo que le pedí, y lo que le pedí estaba mal.
 30. **Menos búsqueda.** Con 40 configuraciones el PBO superaba 0.5 en cinco de
     los ocho valores. Bajado a 24.
 
+## Séptima pasada: el listón estaba mal puesto
+
+31. **El veredicto comparaba contra el 50%, no contra la tasa base.** Las
+    acciones suben algo más del **53% de los días**. Un modelo que dijera
+    "largo siempre", sin mirar un solo dato, acertaría ese 53%. El sistema
+    daba por buena una precisión del 52,67% porque la medía contra una moneda
+    al aire. Medido sobre ocho megacaps, la ventaja real sobre la tasa base era
+    de **−0,31 puntos**: negativa. Ahora hay dos comprobaciones críticas nuevas,
+    "bate a la tasa base" y "aporta sobre comprar y mantener", y esta última
+    dejó de ser opcional. Ningún valor real la superaba (ratio Sharpe frente a
+    B&H entre 0,32 y 0,91).
+
+32. **Faltaban datos que no fueran precio.** El sistema solo miraba OHLCV y
+    algún índice. Se añaden dos familias con contenido informativo distinto:
+
+    * **Estructura de volatilidad** (15 features): pendiente VIX9D/VIX y
+      VIX/VIX3M, backwardation, VVIX y SKEW. El nivel del VIX es la versión
+      pobre de esta información; lo que informa es la forma de la curva y lo
+      que se está pagando por protección. Series públicas de CBOE con
+      histórico largo.
+    * **Descomposición nocturno / intradía** (21 features): quien compra en la
+      apertura no es quien compra en el cierre, y ambos tramos tienen dinámicas
+      propias y a menudo opuestas. El objetivo del sistema los mezcla; estas
+      features los mantienen separados.
+
+    También entran HYG, LQD y ^TNX: el estrés suele aparecer antes en crédito y
+    tipos que en la renta variable.
+
+## Variantes: probar hipótesis en paralelo
+
+`universe.json` define variantes, que son hipótesis distintas sobre el mismo
+valor. Se entrenan **a la vez**, con el mismo código, los mismos datos y el
+mismo día — la única forma de que compararlas signifique algo.
+
+```json
+"variants": {
+  "close": { "_desc": "ancla T-60 -> cierre del día siguiente" },
+  "gap":   { "_desc": "ancla T-60 -> APERTURA del día siguiente",
+             "label.horizon": "open_next" }
+}
+```
+
+Cualquier campo de la configuración se puede sobrescribir (`"model.n_trials"`,
+`"backtest.max_position"`, etc.), así que sirve igual para comparar horizontes
+que umbrales o familias de modelos.
+
+El workflow monta una matriz de valores × variantes: ocho valores y dos
+variantes son dieciséis jobs en paralelo, y siguen tardando lo que el más lento.
+
+Al consolidar se enfrentan y se nombra una ganadora por valor. **El criterio no
+es el Sharpe**, sino la ventaja sobre la tasa base: un Sharpe alto puede venir
+sin más de estar largo en un mercado que sube. En producción, cada valor usa
+automáticamente su variante ganadora y el tablón indica cuál.
+
 ### El test que más importa
 
 De todos, este es el que decide si lo demás sirve: se predice un día concreto

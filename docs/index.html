@@ -217,7 +217,8 @@ function renderToday(d){
     const dir=s.position>0?"long":(s.position<0?"short":"flat");
     const lo=s.ret_p10??0,hi=s.ret_p90??0,mid=s.expected_return??0;
     return `<div class="row ${dir} ${s.operable?"":"off"}" style="animation-delay:${i*26}ms">
-      <div class="tk">${s.ticker}<small>${s.anchor_price} · ${s.verdict}</small>
+      <div class="tk">${s.ticker}<small>${s.anchor_price} · ${s.verdict}`+
+        (s.variant&&s.variant!=="close"?` · ${s.variant}`:"")+`</small>
         ${s.health&&s.health.warnings&&s.health.warnings.length?
           `<small style="color:var(--amber)">⚠ ${s.health.warnings[0]}</small>`:""}</div>
       <div class="prob ${dir}-c">${pct(s.prob_up,0)}<small>sube</small></div>

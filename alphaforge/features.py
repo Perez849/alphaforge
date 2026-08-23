@@ -202,6 +202,97 @@ def _cross_block(daily: pd.DataFrame, context: dict[str, pd.DataFrame]) -> pd.Da
 
 
 # ---------------------------------------------------------------------------
+# Estructura de volatilidad y posicionamiento
+# ---------------------------------------------------------------------------
+def _vol_structure_block(daily: pd.DataFrame,
+                         context: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """Lo que dice el mercado de opciones sobre el riesgo que viene.
+
+    El nivel del VIX a secas es la versión pobre de esta información. Lo que
+    tiene contenido es la FORMA de la curva:
+
+      * VIX9D/VIX y VIX/VIX3M: pendiente de la estructura temporal. En contango
+        normal el mercado no espera sobresaltos; en backwardation hay estrés
+        inmediato y el comportamiento de los retornos cambia de régimen.
+      * VVIX: lo que cuesta la volatilidad de la volatilidad. Sube cuando se
+        compra convexidad, es decir, cuando alguien se está cubriendo en serio.
+      * SKEW: precio relativo de las puts lejanas frente a las calls. Mide
+        cuánto se está pagando por protegerse de una caída brusca.
+
+    Todo esto son series públicas de CBOE con histórico largo, y ninguna se
+    deriva del precio del valor: aportan información que el OHLCV no contiene.
+    """
+    have = {k.replace("^", "").upper(): v for k, v in context.items()}
+    f: dict[str, pd.Series] = {}
+
+    def get(name: str) -> pd.Series | None:
+        d = have.get(name)
+        return None if d is None else d["Close"].reindex(daily.index).ffill(limit=5)
+
+    vix, v9d, v3m = get("VIX"), get("VIX9D"), get("VIX3M")
+    vvix, skew = get("VVIX"), get("SKEW")
+
+    if vix is not None:
+        if v9d is not None:                      # pendiente corta
+            r = v9d / vix.where(vix > 1e-9)
+            f["vs_term_9d_1m"] = r
+            f["vs_term_9d_1m_z"] = zscore(r, 252)
+            f["vs_backwardation_corto"] = (r > 1.0).astype(float)
+        if v3m is not None:                      # pendiente larga
+            r = vix / v3m.where(v3m > 1e-9)
+            f["vs_term_1m_3m"] = r
+            f["vs_term_1m_3m_z"] = zscore(r, 252)
+            f["vs_backwardation"] = (r > 1.0).astype(float)
+            f["vs_term_slope_chg"] = r.diff(5)
+        f["vs_vix_chg_1"] = vix.diff()
+        f["vs_vix_chg_5"] = vix.diff(5)
+        f["vs_vix_rel_ma21"] = vix / ind.sma(vix, 21).where(ind.sma(vix, 21) > 1e-9) - 1
+
+    if vvix is not None:
+        f["vs_vvix_z"] = zscore(vvix, 252)
+        f["vs_vvix_chg5"] = vvix.diff(5)
+        if vix is not None:
+            f["vs_vvix_vix_ratio"] = vvix / vix.where(vix > 1e-9)
+
+    if skew is not None:
+        f["vs_skew_z"] = zscore(skew, 252)
+        f["vs_skew_chg5"] = skew.diff(5)
+
+    return pd.DataFrame(f, index=daily.index)
+
+
+def _overnight_block(daily: pd.DataFrame) -> pd.DataFrame:
+    """Separa el retorno nocturno del intradía.
+
+    Está documentado que ambos componentes tienen dinámicas propias y a menudo
+    opuestas: quien compra en la apertura no es quien compra en el cierre. El
+    objetivo del sistema (ancla -> cierre siguiente) los mezcla, y mezclados se
+    cancelan. Estas features los mantienen separados para que el modelo pueda
+    usar cada uno por su lado.
+    """
+    o, c = daily["Open"], daily["Close"]
+    prev = c.shift(1)
+    on = o / prev.where(prev.abs() > 1e-12) - 1          # nocturno
+    id_ = c / o.where(o.abs() > 1e-12) - 1               # sesión
+    f: dict[str, pd.Series] = {"on_ret": on, "id_ret": id_}
+    for n in (5, 21, 63):
+        f[f"on_mean_{n}"] = on.rolling(n, min_periods=n // 2).mean()
+        f[f"id_mean_{n}"] = id_.rolling(n, min_periods=n // 2).mean()
+        f[f"on_id_spread_{n}"] = f[f"on_mean_{n}"] - f[f"id_mean_{n}"]
+        f[f"on_id_corr_{n}"] = on.rolling(n, min_periods=n // 2).corr(id_)
+    f["on_vol_21"] = on.rolling(21, min_periods=10).std(ddof=0)
+    f["id_vol_21"] = id_.rolling(21, min_periods=10).std(ddof=0)
+    v = f["id_vol_21"]
+    f["on_id_vol_ratio"] = f["on_vol_21"] / v.where(v > 1e-9)
+    f["on_streak"] = np.sign(on).rolling(5, min_periods=3).sum()
+    f["id_streak"] = np.sign(id_).rolling(5, min_periods=3).sum()
+    # reversión: ¿la sesión deshace lo que hizo la noche?
+    f["on_then_id"] = np.sign(on) * np.sign(id_)
+    f["on_then_id_21"] = f["on_then_id"].rolling(21, min_periods=10).mean()
+    return pd.DataFrame(f, index=daily.index)
+
+
+# ---------------------------------------------------------------------------
 # Calendario (no necesita shift: es determinista y conocido de antemano)
 # ---------------------------------------------------------------------------
 def _calendar_block(idx: pd.DatetimeIndex) -> pd.DataFrame:
@@ -278,6 +369,10 @@ def build_features(md: MarketData, cfg: Config) -> pd.DataFrame:
         base = base.join(_resampled_block(daily, "ME", "mo"), how="left")
     if fc.cross_asset:
         base = base.join(_cross_block(daily, md.context), how="left")
+    if fc.vol_structure:
+        base = base.join(_vol_structure_block(daily, md.context), how="left")
+    if fc.overnight:
+        base = base.join(_overnight_block(daily), how="left")
 
     # ---- DESPLAZAMIENTO GLOBAL: todo el bloque BASE pasa a ser info de t-1 ----
     base = base.shift(1)

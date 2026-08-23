@@ -26,7 +26,13 @@ class DataConfig:
     start: str = "2005-01-01"
     end: str | None = None
     # activos de contexto macro / cross-sectional
-    context_tickers: tuple[str, ...] = ("SPY", "QQQ", "^VIX", "TLT", "UUP", "GLD")
+    context_tickers: tuple[str, ...] = (
+        "SPY", "QQQ", "^VIX", "TLT", "UUP", "GLD",
+        # estructura de volatilidad: lo que el mercado de opciones paga por el
+        # riesgo a distintos plazos. Series públicas de CBOE con histórico largo.
+        "^VIX9D", "^VIX3M", "^VVIX", "^SKEW",
+        # crédito y tipos: el otro sitio donde el estrés aparece antes
+        "HYG", "LQD", "^TNX")
     cache_dir: str = "~/.alphaforge/cache"
     max_cache_age_hours: float = 12.0
     # Ancla intradía
@@ -71,6 +77,8 @@ class FeatureConfig:
     monthly: bool = True
     calendar: bool = True
     cross_asset: bool = True
+    vol_structure: bool = True            # estructura temporal del VIX, VVIX, SKEW
+    overnight: bool = True                # descomposición nocturno / intradía
     # Poda de redundancia
     max_abs_corr: float = 0.95
     min_variance: float = 1e-10

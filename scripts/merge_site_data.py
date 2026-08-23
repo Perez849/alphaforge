@@ -77,6 +77,8 @@ def main() -> int:
                    "n_go": sum(1 for e in entries if e.get("verdict") == "GO")},
                   f, indent=2, ensure_ascii=False)
 
+    _compare_variants(models, log)
+
     go = [t for t, m in models.items() if m.get("verdict") == "GO"]
     rev = [t for t, m in models.items() if m.get("verdict") == "REVISAR"]
     log.info(f"publicados {len(models)} modelos ({n_new} nuevos hoy), "
@@ -87,6 +89,54 @@ def main() -> int:
         for fl in failures:
             log.warning(f"  falló {fl.get('ticker')}: {fl.get('error')}")
     return 0
+
+
+RANK = {"GO": 2, "REVISAR": 1, "NO-GO": 0}
+
+
+def _compare_variants(models: dict, log) -> None:
+    """Enfrenta las variantes del mismo valor y nombra una ganadora.
+
+    Comparar hipótesis entrenadas con el mismo código, los mismos datos y el
+    mismo día es la única forma de que la comparación signifique algo. El
+    criterio no es el Sharpe: es la ventaja sobre la TASA BASE, porque un
+    Sharpe alto puede venir sin más de estar largo en un mercado que sube.
+    """
+    grupos: dict[str, list] = {}
+    for key, m in models.items():
+        base = m.get("base_ticker") or key.split("::")[0]
+        grupos.setdefault(base, []).append((key, m))
+    if not any(len(v) > 1 for v in grupos.values()):
+        return
+
+    log.info("comparación de variantes (ventaja sobre la tasa base):")
+    header = f"  {'valor':<8}{'variante':<9}{'acierto':>9}{'tasa base':>11}" \
+             f"{'ventaja':>10}{'Sharpe':>9}{'vs B&H':>9}{'veredicto':>10}"
+    log.info(header)
+    for base, items in sorted(grupos.items()):
+        if len(items) < 2:
+            continue
+        best, best_edge = None, -9e9
+        for key, m in sorted(items, key=lambda x: x[0]):
+            h = m.get("headline", {})
+            da = h.get("directional_accuracy")
+            br = h.get("base_rate_up")
+            edge = (da - br) if (da is not None and br is not None) else None
+            sh, bh = h.get("sharpe"), h.get("bh_sharpe")
+            ratio = (sh / bh) if (sh is not None and bh) else None
+            f = lambda x, n=2, suf="": "—" if x is None else f"{x:.{n}f}{suf}"
+            log.info(f"  {base:<8}{m.get('variant', '?'):<9}"
+                     f"{f(100 * da if da is not None else None, 2, '%'):>9}"
+                     f"{f(100 * br if br is not None else None, 2, '%'):>11}"
+                     f"{f(100 * edge if edge is not None else None, 2, 'pp'):>10}"
+                     f"{f(sh):>9}{f(ratio):>9}{m.get('verdict', '?'):>10}")
+            score = (RANK.get(m.get("verdict"), 0), edge if edge is not None else -9e9)
+            if score > (RANK.get(models[best].get("verdict"), 0) if best else -1,
+                        best_edge):
+                best, best_edge = key, (edge if edge is not None else -9e9)
+        for key, m in items:
+            m["variant_winner"] = (key == best)
+        log.info(f"  {'':8}-> gana '{models[best].get('variant')}' para {base}")
 
 
 if __name__ == "__main__":

@@ -635,6 +635,10 @@ def run_experiment(cfg: Config, md=None) -> ExperimentResult:
     metrics["continuous"] = continuous_pnl(bt.position, md.anchor.price, cfg)
     metrics["auc_oos"] = (float(roc_auc_score(oos["y_cls"], oos["prob_up"]))
                           if oos["y_cls"].nunique() > 1 else np.nan)
+    # tasa base: qué fracción de días sube el valor. Es el listón real.
+    metrics["base_rate_up"] = float((oos["y_ret"] > 0).mean())
+    metrics["edge_over_base"] = (metrics.get("directional_accuracy", np.nan)
+                                 - metrics["base_rate_up"])
     metrics["buy_hold"] = buy_and_hold(md.daily["Close"], oos.index, cfg)
     metrics["anchor_source"] = md.anchor.source
     metrics["anchor_coverage"] = md.anchor.coverage
@@ -843,6 +847,28 @@ def _verdict(metrics: dict, pbo, perm: dict, calib: dict, stab: dict,
     auc = metrics.get("auc_oos", np.nan)
     add("AUC > 0.52", np.isfinite(auc) and auc > 0.52, f"AUC = {fmt_num(auc)}")
 
+    # ── El benchmark correcto NO es 50% ──────────────────────────────────────
+    # Las acciones suben algo más del 53% de los días. Un modelo que dijera
+    # "largo siempre", sin mirar un dato, acertaría ese 53%. Comparar el acierto
+    # direccional contra el 50% hacía pasar por señal lo que era simple deriva
+    # alcista: medido sobre ocho megacaps, la ventaja real sobre la tasa base
+    # era de -0.31 puntos, es decir, negativa.
+    base = metrics.get("base_rate_up", np.nan)
+    da = metrics.get("directional_accuracy", np.nan)
+    if np.isfinite(base) and np.isfinite(da):
+        edge = da - base
+        add("bate a la tasa base", edge > 0.005,
+            f"acierto {fmt_pct(da, 2)} frente a {fmt_pct(base, 2)} de días "
+            f"alcistas ({100 * edge:+.2f} pp)")
+
+    # Estar largo con tamaño variable no es predecir. Si el Sharpe no supera al
+    # de comprar y mantener, la señal no está aportando nada.
+    bh_sr = metrics.get("buy_hold", {}).get("sharpe", np.nan)
+    if np.isfinite(bh_sr) and np.isfinite(sh):
+        add("aporta sobre comprar y mantener", sh > bh_sr,
+            f"Sharpe {fmt_num(sh, 2)} frente a {fmt_num(bh_sr, 2)} de B&H "
+            f"(ratio {fmt_num(sh / bh_sr, 2) if abs(bh_sr) > 1e-9 else 'n/a'})")
+
     if pbo is not None and np.isfinite(pbo.pbo):
         add("PBO bajo", pbo.pbo <= cfg.validation.pbo_alarm,
             f"PBO = {fmt_num(pbo.pbo)} (alarma > {cfg.validation.pbo_alarm})")
@@ -867,8 +893,7 @@ def _verdict(metrics: dict, pbo, perm: dict, calib: dict, stab: dict,
         critical=False)
 
     bh = metrics.get("buy_hold", {}).get("sharpe", np.nan)
-    add("bate al buy & hold", np.isfinite(sh) and np.isfinite(bh) and sh > bh,
-        f"Sharpe estrategia {fmt_num(sh, 2)} vs. B&H {fmt_num(bh, 2)}", critical=False)
+    # (cubierto arriba por "aporta sobre comprar y mantener", ahora crítico)
 
     cont = metrics.get("continuous", {})
     if cont.get("n", 0) > 20 and np.isfinite(cont.get("sharpe", np.nan)):
