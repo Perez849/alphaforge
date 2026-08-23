@@ -907,6 +907,32 @@ def _t_vol_leak():
     return "objetivo = RV(t+1) exacto; regresores HAR solo con datos hasta t"
 
 
+@check("volatilidad: el peso del residuo se calibra fuera de muestra")
+def _t_vol_shrink():
+    """El peso se estimaba sobre filas que los modelos ya habían visto: salía
+    1.00 siempre. Con horizonte 5, donde los objetivos de días consecutivos
+    comparten 4 de 5 días, eso aplicaba residuo memorizado sobre un HAR que
+    funcionaba y hundía el R2 a -0.40 frente al benchmark."""
+    from alphaforge.volatility import run_vol_experiment
+    cfg = Config()
+    cfg.verbose = 0
+    cfg.features.cross_asset = False
+    cfg.features.monthly = False
+    cfg.validation.n_splits = 4
+    cfg.validation.min_train_days = 800
+    md = make_market_data(n=2600, seed=71, signal="none", with_context=False)
+
+    for h in (1, 5):
+        m = run_vol_experiment(md, cfg, horizon=h).metrics
+        assert m["shrink_medio"] < 0.75, (
+            f"h={h}: peso {m['shrink_medio']:.2f} sin señal que justificarlo; "
+            "se está calibrando con datos ya vistos")
+        assert m["r2_vs_har"] > -0.05, (
+            f"h={h}: empeora a HAR en {m['r2_vs_har']:.3f}; el anclaje al "
+            "benchmark no está protegiendo")
+    return "sin señal el peso baja y el resultado se queda pegado a HAR"
+
+
 @check("VOLATILIDAD: encuentra lo que HAR no ve, y solo si existe")
 def _t_vol_experiment():
     """Las dos caras: con asimetría inyectada debe batir a HAR; con volatilidad

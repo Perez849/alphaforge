@@ -331,6 +331,22 @@ def run_vol_experiment(md, cfg, horizon: int = 1,
         Ztr, Zte = imp.fit_transform(X.iloc[tr]), imp.transform(X.iloc[te])
         ytr, yte = y.iloc[tr].to_numpy(), y.iloc[te].to_numpy()
 
+        # ── Bloque para calibrar el peso, SIN entrenar en él ────────────────
+        # El peso del residuo se estimaba sobre el tramo final del train, que
+        # es tramo que los modelos ya habían visto: el residuo parecía perfecto
+        # y el peso salía 1.00 siempre. Con horizonte 1 apenas molestaba; con
+        # horizonte 5, donde los objetivos de días consecutivos comparten 4 de 5
+        # días, la memorización es masiva y aplicaba residuo basura sobre un HAR
+        # que funcionaba (medido: -0.40 de R2 frente a HAR).
+        gap = max(horizon + 1, 3)
+        n_val = max(150, int(0.2 * len(tr)))
+        core = tr[: max(100, len(tr) - n_val - gap)]
+        val = tr[len(tr) - n_val:]
+        if len(core) < 200:                       # train corto: sin calibración
+            core, val = tr, np.array([], dtype=int)
+        Zc = imp.transform(X.iloc[core])
+        yc = y.iloc[core].to_numpy()
+
         # benchmark: HAR con exactamente la misma información
         har = HARModel().fit(har_X.iloc[tr], y.iloc[tr])
         p_har = har.predict(har_X.iloc[te])
@@ -342,6 +358,9 @@ def run_vol_experiment(md, cfg, horizon: int = 1,
         # parte DESDE HAR y solo puede añadir lo que HAR no captura.
         har_in = har.predict(har_X.iloc[tr])
         resid_tr = ytr - har_in
+        # los modelos que estiman el peso se ajustan solo con `core`
+        har_core = HARModel().fit(har_X.iloc[core], y.iloc[core])
+        resid_core = yc - har_core.predict(har_X.iloc[core])
 
         preds, fitted = {}, []
         try:
@@ -371,21 +390,33 @@ def run_vol_experiment(md, cfg, horizon: int = 1,
         # el coeficiente se va a cero y el resultado es HAR intacto: por
         # construcción, no se puede quedar peor.
         shrink = 0.0
-        try:
-            n_val = max(120, int(0.2 * len(tr)))
-            v = tr[-n_val:]
-            Zv = imp.transform(X.iloc[v])
-            # axis=1: media POR FILA de los modelos. Con axis=0 salían dos
-            # números en vez de una serie, el producto escalar reventaba y el
-            # except dejaba el peso en cero para siempre, en silencio.
-            rv_hat = np.mean(np.column_stack([mm.predict(Zv) for mm in fitted]),
-                             axis=1)
-            rv_true = y.iloc[v].to_numpy() - har.predict(har_X.iloc[v])
-            den = float(np.sum(rv_hat ** 2))
-            if den > _EPS:
-                shrink = float(np.clip(np.sum(rv_hat * rv_true) / den, 0.0, 1.0))
-        except Exception as e:                       # noqa: BLE001
-            log.warning(f"fold {sp.fold}: peso del residuo no estimable ({e})")
+        if len(val) >= 60:
+            try:
+                # Modelos gemelos entrenados SOLO con `core`: para ellos, `val`
+                # es territorio no visto, que es la única forma de que el peso
+                # signifique algo.
+                probe = []
+                pr = RidgeCV(alphas=np.logspace(-2, 5, 30)).fit(Zc, resid_core)
+                probe.append(pr)
+                pg = HistGradientBoostingRegressor(
+                    max_depth=3, learning_rate=0.04, max_iter=250,
+                    min_samples_leaf=60, l2_regularization=3.0,
+                    early_stopping=True, validation_fraction=0.15,
+                    random_state=cfg.model.random_state + sp.fold)
+                pg.fit(Zc, resid_core)
+                probe.append(pg)
+
+                Zv = imp.transform(X.iloc[val])
+                rv_hat = np.mean(np.column_stack([mm.predict(Zv) for mm in probe]),
+                                 axis=1)
+                rv_true = y.iloc[val].to_numpy() - har_core.predict(har_X.iloc[val])
+                den = float(np.sum(rv_hat ** 2))
+                if den > _EPS:
+                    shrink = float(np.clip(np.sum(rv_hat * rv_true) / den, 0.0, 1.0))
+            except Exception as e:                   # noqa: BLE001
+                log.warning(f"fold {sp.fold}: peso del residuo no estimable ({e})")
+        else:
+            log.debug(f"fold {sp.fold}: bloque de calibración corto, peso 0")
 
         p_ml = p_har + shrink * r_ml
         # tope de desviación: ni con shrinkage alto se permite delirar
