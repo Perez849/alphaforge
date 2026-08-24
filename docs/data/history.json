@@ -39,7 +39,123 @@
         }
       ],
       "resolved": false
+    },
+    {
+      "date": "2026-08-24",
+      "anchor_et": "2026-08-24 15:17",
+      "signals": [
+        {
+          "ticker": "QQQ",
+          "prob_up": 0.6093,
+          "expected_return": 0.00905,
+          "ret_p10": -0.01767,
+          "ret_p90": 0.01938,
+          "position": 0.132,
+          "anchor_price": 707.52,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "NVDA",
+          "prob_up": 0.571,
+          "expected_return": -0.00096,
+          "ret_p10": -0.04102,
+          "ret_p90": 0.03795,
+          "position": 0.047,
+          "anchor_price": 209.39,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "GOOGL",
+          "prob_up": 0.568,
+          "expected_return": 0.01154,
+          "ret_p10": -0.01824,
+          "ret_p90": 0.02905,
+          "position": 0.04,
+          "anchor_price": 348.46,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "SPY",
+          "prob_up": 0.5403,
+          "expected_return": 0.00296,
+          "ret_p10": -0.0137,
+          "ret_p90": 0.0108,
+          "position": 0.0,
+          "anchor_price": 764.07,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "AAPL",
+          "prob_up": 0.5305,
+          "expected_return": 0.01218,
+          "ret_p10": -0.04386,
+          "ret_p90": 0.03622,
+          "position": 0.0,
+          "anchor_price": 311.5101,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "AMZN",
+          "prob_up": 0.4985,
+          "expected_return": -0.0183,
+          "ret_p10": -0.05556,
+          "ret_p90": 0.04988,
+          "position": 0.0,
+          "anchor_price": 261.82,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "META",
+          "prob_up": 0.4949,
+          "expected_return": 0.01011,
+          "ret_p10": -0.0269,
+          "ret_p90": 0.03422,
+          "position": 0.0,
+          "anchor_price": 560.215,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "MSFT",
+          "prob_up": 0.442,
+          "expected_return": -0.00918,
+          "ret_p10": -0.0414,
+          "ret_p90": 0.05013,
+          "position": -0.203,
+          "anchor_price": 488.65,
+          "verdict": "NO-GO",
+          "operable": false
+        }
+      ],
+      "resolved": false
     }
   ],
-  "updated_utc": "2026-08-21T06:43:38+00:00"
+  "updated_utc": "2026-08-24T19:18:13+00:00",
+  "scoreboard": {
+    "overall": {
+      "n": 0,
+      "hit_rate": null,
+      "avg_pnl": null,
+      "cum_pnl": null,
+      "interval_coverage": null,
+      "avg_prob": null
+    },
+    "operable_only": {
+      "n": 0,
+      "hit_rate": null,
+      "avg_pnl": null,
+      "cum_pnl": null,
+      "interval_coverage": null,
+      "avg_prob": null
+    },
+    "by_ticker": {},
+    "equity_curve": [],
+    "note": "Acierto medido en vivo sobre señales publicadas antes de conocerse el resultado. Sin reentrenamientos retroactivos."
+  }
 }
