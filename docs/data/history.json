@@ -134,9 +134,104 @@
         }
       ],
       "resolved": false
+    },
+    {
+      "date": "2026-08-25",
+      "anchor_et": "2026-08-25 15:18",
+      "signals": [
+        {
+          "ticker": "QQQ",
+          "prob_up": 0.6024,
+          "expected_return": 0.00509,
+          "ret_p10": -0.01872,
+          "ret_p90": 0.0202,
+          "position": 0.116,
+          "anchor_price": 709.49,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "AMZN",
+          "prob_up": 0.5914,
+          "expected_return": -0.0041,
+          "ret_p10": -0.04191,
+          "ret_p90": 0.0461,
+          "position": 0.32,
+          "anchor_price": 260.2,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "SPY",
+          "prob_up": 0.5759,
+          "expected_return": -0.00142,
+          "ret_p10": -0.01297,
+          "ret_p90": 0.01167,
+          "position": 0.058,
+          "anchor_price": 765.0,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "GOOGL",
+          "prob_up": 0.57,
+          "expected_return": 0.02015,
+          "ret_p10": -0.03318,
+          "ret_p90": 0.03095,
+          "position": 0.044,
+          "anchor_price": 346.24,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "AAPL",
+          "prob_up": 0.5451,
+          "expected_return": 0.00721,
+          "ret_p10": -0.03013,
+          "ret_p90": 0.03307,
+          "position": 0.0,
+          "anchor_price": 308.995,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "MSFT",
+          "prob_up": 0.5145,
+          "expected_return": 0.00757,
+          "ret_p10": -0.0409,
+          "ret_p90": 0.05181,
+          "position": 0.051,
+          "anchor_price": 490.28,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "NVDA",
+          "prob_up": 0.5068,
+          "expected_return": 0.00144,
+          "ret_p10": -0.03929,
+          "ret_p90": 0.04655,
+          "position": 0.0,
+          "anchor_price": 211.9205,
+          "verdict": "NO-GO",
+          "operable": false
+        },
+        {
+          "ticker": "META",
+          "prob_up": 0.4949,
+          "expected_return": 0.00628,
+          "ret_p10": -0.031,
+          "ret_p90": 0.04002,
+          "position": 0.0,
+          "anchor_price": 566.09,
+          "verdict": "NO-GO",
+          "operable": false
+        }
+      ],
+      "resolved": false
     }
   ],
-  "updated_utc": "2026-08-24T19:18:13+00:00",
+  "updated_utc": "2026-08-25T19:18:26+00:00",
   "scoreboard": {
     "overall": {
       "n": 0,
