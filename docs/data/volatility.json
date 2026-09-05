@@ -1,31 +1,31 @@
 {
-  "generated": "2026-08-29T13:54:07+00:00",
+  "generated": "2026-09-05T11:57:20+00:00",
   "runs": {
     "AAPL@h1": {
       "verdict": "GO",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.459512,
-        "har_r2_vs_media": 0.432548,
-        "r2_vs_har": 0.047517,
-        "qlike": 0.567207,
-        "qlike_har": 0.588053,
-        "qlike_mejora": 0.035449,
-        "dm_stat": -7.09424,
+        "n": 4420,
+        "r2_vs_media": 0.460419,
+        "har_r2_vs_media": 0.432168,
+        "r2_vs_har": 0.049753,
+        "qlike": 0.565067,
+        "qlike_har": 0.587849,
+        "qlike_mejora": 0.038754,
+        "dm_stat": -6.957131,
         "dm_pvalue": 0.0,
         "mz": {
-          "alpha": 0.01887,
-          "beta": 1.018986,
-          "r2": 0.339821
+          "alpha": 0.031098,
+          "beta": 1.024766,
+          "r2": 0.341231
         },
         "mz_har": {
-          "alpha": -0.112327,
-          "beta": 0.954472,
-          "r2": 0.309218
+          "alpha": -0.112299,
+          "beta": 0.954301,
+          "r2": 0.309088
         },
-        "corr": 0.582942,
+        "corr": 0.584149,
         "folds_mejor_que_har": 1.0,
-        "shrink_medio": 0.757375
+        "shrink_medio": 0.792375
       },
       "checks": [
         {
@@ -37,25 +37,25 @@
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.048 (HAR da 0.433 sobre la media)",
+          "detail": "R2 frente a HAR = 0.050 (HAR da 0.432 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-7.09, p=0.0000",
+          "detail": "Diebold-Mariano t=-6.96, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.5672 frente a 0.5881 de HAR",
+          "detail": "QLIKE 0.5651 frente a 0.5878 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.019 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.025 (ideal 1.0)",
           "critical": false
         },
         {
@@ -69,74 +69,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.5365024877085183,
-          "r2_vs_har": 0.028743261244724483,
-          "har_r2_vs_media": 0.5227857951487863,
-          "shrink": 0.405
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.537424709840268,
+          "r2_vs_har": 0.03438913142083955,
+          "har_r2_vs_media": 0.520950617674401,
+          "shrink": 0.473
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.4133269284827161,
-          "r2_vs_har": 0.044395693999714325,
-          "har_r2_vs_media": 0.3860711302434122,
-          "shrink": 0.578
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.4181957630669513,
+          "r2_vs_har": 0.04812140247067065,
+          "har_r2_vs_media": 0.3887831510833796,
+          "shrink": 0.806
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.5189241827129885,
-          "r2_vs_har": 0.06915348016909229,
-          "har_r2_vs_media": 0.48318459913842615,
-          "shrink": 1.0
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.5200853551252529,
+          "r2_vs_har": 0.0730160888376945,
+          "har_r2_vs_media": 0.4822837385893757,
+          "shrink": 0.952
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.5786739606323796,
-          "r2_vs_har": 0.03433749051924939,
-          "har_r2_vs_media": 0.5636922473109442,
-          "shrink": 0.829
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.5776825013470734,
+          "r2_vs_har": 0.03157814330320541,
+          "har_r2_vs_media": 0.56391164064242,
+          "shrink": 0.853
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.40809060046933954,
-          "r2_vs_har": 0.052067262125015334,
-          "har_r2_vs_media": 0.3755786925794279,
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.41236199067329526,
+          "r2_vs_har": 0.06436267911378146,
+          "har_r2_vs_media": 0.37193825405542313,
           "shrink": 1.0
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.42623783710495033,
-          "r2_vs_har": 0.06389713209584102,
-          "har_r2_vs_media": 0.38707359781981443,
-          "shrink": 0.769
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.4197761785193297,
+          "r2_vs_har": 0.05452336756718923,
+          "har_r2_vs_media": 0.38631606368980964,
+          "shrink": 0.786
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.3879621786035583,
-          "r2_vs_har": 0.030601422597443473,
-          "har_r2_vs_media": 0.36864171697429227,
-          "shrink": 0.782
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.3746631788520951,
+          "r2_vs_har": 0.026825982682640248,
+          "har_r2_vs_media": 0.3574254860690782,
+          "shrink": 0.753
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.23338070660062737,
-          "r2_vs_har": 0.05379528227872854,
-          "har_r2_vs_media": 0.1897955283444277,
-          "shrink": 0.696
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.24638103575395498,
+          "r2_vs_har": 0.06158457052146227,
+          "har_r2_vs_media": 0.19692394160140902,
+          "shrink": 0.716
         }
       ],
       "horizon": 1,
@@ -146,58 +146,58 @@
     "AAPL@h5": {
       "verdict": "REVISAR",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.499095,
-        "har_r2_vs_media": 0.492244,
-        "r2_vs_har": 0.013493,
-        "qlike": 0.300368,
-        "qlike_har": 0.302687,
-        "qlike_mejora": 0.007662,
-        "dm_stat": -0.833777,
-        "dm_pvalue": 0.404406,
+        "n": 4417,
+        "r2_vs_media": 0.500514,
+        "har_r2_vs_media": 0.492097,
+        "r2_vs_har": 0.016571,
+        "qlike": 0.296886,
+        "qlike_har": 0.302352,
+        "qlike_mejora": 0.018079,
+        "dm_stat": -1.076465,
+        "dm_pvalue": 0.281719,
         "mz": {
-          "alpha": -0.23036,
-          "beta": 0.890033,
-          "r2": 0.329592
+          "alpha": -0.20378,
+          "beta": 0.906746,
+          "r2": 0.331595
         },
         "mz_har": {
-          "alpha": -0.250242,
-          "beta": 0.884374,
-          "r2": 0.327202
+          "alpha": -0.250382,
+          "beta": 0.884121,
+          "r2": 0.327343
         },
-        "corr": 0.574101,
+        "corr": 0.575843,
         "folds_mejor_que_har": 0.625,
-        "shrink_medio": 0.2185
+        "shrink_medio": 0.199375
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.499",
+          "detail": "R2 frente a la media = 0.501",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.013 (HAR da 0.492 sobre la media)",
+          "detail": "R2 frente a HAR = 0.017 (HAR da 0.492 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": false,
-          "detail": "Diebold-Mariano t=-0.83, p=0.4044",
+          "detail": "Diebold-Mariano t=-1.08, p=0.2817",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.3004 frente a 0.3027 de HAR",
+          "detail": "QLIKE 0.2969 frente a 0.3024 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 0.890 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 0.907 (ideal 1.0)",
           "critical": false
         },
         {
@@ -211,74 +211,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.5627388774738424,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.5623944127733843,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.5627388774738424,
+          "har_r2_vs_media": 0.5623944127733843,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.44508838228649394,
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.446047749751285,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.44508838228649394,
+          "har_r2_vs_media": 0.446047749751285,
           "shrink": 0.0
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.5446669425150785,
-          "r2_vs_har": 0.0602320946863929,
-          "har_r2_vs_media": 0.515483498733686,
-          "shrink": 0.182
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.5431161463966582,
+          "r2_vs_har": 0.05812461402944746,
+          "har_r2_vs_media": 0.5149211239525626,
+          "shrink": 0.158
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.6748415065015689,
-          "r2_vs_har": 0.09216266791309191,
-          "har_r2_vs_media": 0.6418317665446001,
-          "shrink": 0.723
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.6737678288603037,
+          "r2_vs_har": 0.0848851173464713,
+          "har_r2_vs_media": 0.6435068674724953,
+          "shrink": 0.651
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.3764372475936151,
-          "r2_vs_har": -0.1236029407451793,
-          "har_r2_vs_media": 0.4450328227222021,
-          "shrink": 0.5
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.38010374687636295,
+          "r2_vs_har": -0.08984070407417333,
+          "har_r2_vs_media": 0.43120471569260865,
+          "shrink": 0.458
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.4165250531910383,
-          "r2_vs_har": 0.018139435974117046,
-          "har_r2_vs_media": 0.4057456138002292,
-          "shrink": 0.115
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.42083733012932345,
+          "r2_vs_har": 0.015679453935791732,
+          "har_r2_vs_media": 0.41161172324762474,
+          "shrink": 0.084
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.4705137990993876,
-          "r2_vs_har": 0.015390739835143386,
-          "har_r2_vs_media": 0.46223723224788815,
-          "shrink": 0.114
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.4452155261569727,
+          "r2_vs_har": 0.017098239735210297,
+          "har_r2_vs_media": 0.43556467566649726,
+          "shrink": 0.125
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.21878661710490677,
-          "r2_vs_har": 0.028546828109724753,
-          "har_r2_vs_media": 0.19583011770398484,
-          "shrink": 0.114
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.24962281931165686,
+          "r2_vs_har": 0.0339981961257384,
+          "har_r2_vs_media": 0.22321347881663478,
+          "shrink": 0.119
         }
       ],
       "horizon": 5,
@@ -288,58 +288,58 @@
     "AMZN@h1": {
       "verdict": "GO",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.435866,
-        "har_r2_vs_media": 0.418484,
-        "r2_vs_har": 0.02989,
-        "qlike": 0.583543,
-        "qlike_har": 0.597774,
-        "qlike_mejora": 0.023807,
-        "dm_stat": -5.219194,
+        "n": 4420,
+        "r2_vs_media": 0.434843,
+        "har_r2_vs_media": 0.417882,
+        "r2_vs_har": 0.029136,
+        "qlike": 0.581335,
+        "qlike_har": 0.598137,
+        "qlike_mejora": 0.02809,
+        "dm_stat": -5.121626,
         "dm_pvalue": 0.0,
         "mz": {
-          "alpha": 0.028742,
-          "beta": 1.022866,
-          "r2": 0.375098
+          "alpha": 0.001767,
+          "beta": 1.010334,
+          "r2": 0.374529
         },
         "mz_har": {
-          "alpha": -0.055355,
-          "beta": 0.978282,
-          "r2": 0.356659
+          "alpha": -0.056887,
+          "beta": 0.977205,
+          "r2": 0.356181
         },
-        "corr": 0.612452,
+        "corr": 0.611988,
         "folds_mejor_que_har": 0.875,
-        "shrink_medio": 0.726
+        "shrink_medio": 0.674
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.436",
+          "detail": "R2 frente a la media = 0.435",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.030 (HAR da 0.418 sobre la media)",
+          "detail": "R2 frente a HAR = 0.029 (HAR da 0.418 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-5.22, p=0.0000",
+          "detail": "Diebold-Mariano t=-5.12, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.5835 frente a 0.5978 de HAR",
+          "detail": "QLIKE 0.5813 frente a 0.5981 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.023 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.010 (ideal 1.0)",
           "critical": false
         },
         {
@@ -353,74 +353,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.20578694032742972,
-          "r2_vs_har": 0.009757642429019886,
-          "har_r2_vs_media": 0.197960929866968,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.21537688622191153,
+          "r2_vs_har": 0.021201728585927504,
+          "har_r2_vs_media": 0.19838118160492724,
           "shrink": 1.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.3812196947332023,
-          "r2_vs_har": 0.043031988612874494,
-          "har_r2_vs_media": 0.3533949955444431,
-          "shrink": 0.41
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.3830531761659659,
+          "r2_vs_har": 0.04323709643268403,
+          "har_r2_vs_media": 0.35517271673710227,
+          "shrink": 0.378
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.4158448710651209,
-          "r2_vs_har": -0.0029754856458270584,
-          "har_r2_vs_media": 0.4175778597831481,
-          "shrink": 0.788
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.413268954795748,
+          "r2_vs_har": -0.0040733113301931745,
+          "har_r2_vs_media": 0.4156491975402149,
+          "shrink": 0.729
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.6280484198550715,
-          "r2_vs_har": 0.013256702222248617,
-          "har_r2_vs_media": 0.6230513234976087,
-          "shrink": 0.242
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.6303441041394575,
+          "r2_vs_har": 0.016347173303877804,
+          "har_r2_vs_media": 0.6242008503120589,
+          "shrink": 0.328
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.5398946892730373,
-          "r2_vs_har": 0.03376449481507471,
-          "har_r2_vs_media": 0.5238165972395059,
-          "shrink": 0.77
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.5305543698635852,
+          "r2_vs_har": 0.021499442807698665,
+          "har_r2_vs_media": 0.5202397927258857,
+          "shrink": 0.565
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.3483863122382659,
-          "r2_vs_har": 0.038757242949352455,
-          "har_r2_vs_media": 0.3221132924204694,
-          "shrink": 0.908
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.34345209654765785,
+          "r2_vs_har": 0.0350200631725861,
+          "har_r2_vs_media": 0.31962533271842997,
+          "shrink": 0.842
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.43093405900903814,
-          "r2_vs_har": 0.04610704424742407,
-          "har_r2_vs_media": 0.40342788196606816,
-          "shrink": 0.854
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.4340955564713569,
+          "r2_vs_har": 0.04963438538263265,
+          "har_r2_vs_media": 0.4045402792098223,
+          "shrink": 0.654
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.20536156239518855,
-          "r2_vs_har": 0.05681192686755454,
-          "har_r2_vs_media": 0.15749736426827587,
-          "shrink": 0.836
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.19719047151710112,
+          "r2_vs_har": 0.053122583647431054,
+          "har_r2_vs_media": 0.1521505164043605,
+          "shrink": 0.896
         }
       ],
       "horizon": 1,
@@ -430,58 +430,58 @@
     "AMZN@h5": {
       "verdict": "NO-GO",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.451195,
-        "har_r2_vs_media": 0.477519,
-        "r2_vs_har": -0.050382,
-        "qlike": 0.303839,
-        "qlike_har": 0.314709,
-        "qlike_mejora": 0.034541,
-        "dm_stat": 1.527635,
-        "dm_pvalue": 0.126603,
+        "n": 4417,
+        "r2_vs_media": 0.444096,
+        "har_r2_vs_media": 0.477279,
+        "r2_vs_har": -0.063481,
+        "qlike": 0.305337,
+        "qlike_har": 0.314594,
+        "qlike_mejora": 0.029423,
+        "dm_stat": 1.805315,
+        "dm_pvalue": 0.071025,
         "mz": {
-          "alpha": -0.187938,
-          "beta": 0.910805,
-          "r2": 0.374761
+          "alpha": -0.210542,
+          "beta": 0.896501,
+          "r2": 0.368326
         },
         "mz_har": {
-          "alpha": -0.138255,
-          "beta": 0.932759,
-          "r2": 0.396565
+          "alpha": -0.139836,
+          "beta": 0.931481,
+          "r2": 0.396418
         },
-        "corr": 0.612177,
+        "corr": 0.606899,
         "folds_mejor_que_har": 0.5,
-        "shrink_medio": 0.224875
+        "shrink_medio": 0.22475
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.451",
+          "detail": "R2 frente a la media = 0.444",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": false,
-          "detail": "R2 frente a HAR = -0.050 (HAR da 0.478 sobre la media)",
+          "detail": "R2 frente a HAR = -0.063 (HAR da 0.477 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": false,
-          "detail": "Diebold-Mariano t=1.53, p=0.1266",
+          "detail": "Diebold-Mariano t=1.81, p=0.0710",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.3038 frente a 0.3147 de HAR",
+          "detail": "QLIKE 0.3053 frente a 0.3146 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 0.911 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 0.897 (ideal 1.0)",
           "critical": false
         },
         {
@@ -495,74 +495,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.281916694425162,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.28484226875181906,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.281916694425162,
+          "har_r2_vs_media": 0.28484226875181906,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.4999456061917461,
-          "r2_vs_har": 0.07175433921686625,
-          "har_r2_vs_media": 0.46129088997154843,
-          "shrink": 0.126
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.4946558392308573,
+          "r2_vs_har": 0.0608764688772091,
+          "har_r2_vs_media": 0.46189809538158766,
+          "shrink": 0.105
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.16531740998627964,
-          "r2_vs_har": -0.46438163803875554,
-          "har_r2_vs_media": 0.4300102047635549,
-          "shrink": 0.666
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.12473363707762175,
+          "r2_vs_har": -0.5302477296255363,
+          "har_r2_vs_media": 0.42802309326963495,
+          "shrink": 0.719
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.6662702121886088,
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.6679171490307978,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.6662702121886088,
+          "har_r2_vs_media": 0.6679171490307978,
           "shrink": 0.0
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.5495214277335929,
-          "r2_vs_har": -0.02518238135420381,
-          "har_r2_vs_media": 0.5605868960883309,
-          "shrink": 0.239
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.5364976802956993,
+          "r2_vs_har": -0.025410935090473874,
+          "har_r2_vs_media": 0.5479838337559712,
+          "shrink": 0.235
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.3248300677172987,
-          "r2_vs_har": 0.027986599036034843,
-          "har_r2_vs_media": 0.30539030468806116,
-          "shrink": 0.15
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.328872282038958,
+          "r2_vs_har": 0.017363521539650706,
+          "har_r2_vs_media": 0.3170132264857468,
+          "shrink": 0.088
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.5611925646970894,
-          "r2_vs_har": 0.06322922962594424,
-          "har_r2_vs_media": 0.531574373175955,
-          "shrink": 0.193
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.5655686384147707,
+          "r2_vs_har": 0.06492116035699025,
+          "har_r2_vs_media": 0.5354067024433099,
+          "shrink": 0.189
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.15518927059442233,
-          "r2_vs_har": 0.06468494211858922,
-          "har_r2_vs_media": 0.09676346778895561,
-          "shrink": 0.425
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.1381073947604331,
+          "r2_vs_har": 0.05943985979763977,
+          "har_r2_vs_media": 0.08363902700136538,
+          "shrink": 0.462
         }
       ],
       "horizon": 5,
@@ -572,28 +572,28 @@
     "GOOGL@h1": {
       "verdict": "REVISAR",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.407361,
-        "har_r2_vs_media": 0.390407,
-        "r2_vs_har": 0.027812,
-        "qlike": 0.584701,
-        "qlike_har": 0.571021,
-        "qlike_mejora": -0.023956,
-        "dm_stat": -3.406938,
-        "dm_pvalue": 0.000657,
+        "n": 4420,
+        "r2_vs_media": 0.407004,
+        "har_r2_vs_media": 0.390184,
+        "r2_vs_har": 0.027582,
+        "qlike": 0.582965,
+        "qlike_har": 0.570361,
+        "qlike_mejora": -0.022098,
+        "dm_stat": -3.550071,
+        "dm_pvalue": 0.000385,
         "mz": {
-          "alpha": 0.051293,
-          "beta": 1.023968,
-          "r2": 0.352572
+          "alpha": 0.041821,
+          "beta": 1.018181,
+          "r2": 0.352261
         },
         "mz_har": {
-          "alpha": -0.043496,
-          "beta": 0.981673,
-          "r2": 0.334135
+          "alpha": -0.044343,
+          "beta": 0.981221,
+          "r2": 0.333988
         },
-        "corr": 0.593778,
+        "corr": 0.593516,
         "folds_mejor_que_har": 0.875,
-        "shrink_medio": 0.682375
+        "shrink_medio": 0.66975
       },
       "checks": [
         {
@@ -611,19 +611,19 @@
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-3.41, p=0.0007",
+          "detail": "Diebold-Mariano t=-3.55, p=0.0004",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": false,
-          "detail": "QLIKE 0.5847 frente a 0.5710 de HAR",
+          "detail": "QLIKE 0.5830 frente a 0.5704 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.024 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.018 (ideal 1.0)",
           "critical": false
         },
         {
@@ -637,74 +637,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.4417852991142953,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.4419150361889205,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.4417852991142953,
+          "har_r2_vs_media": 0.4419150361889205,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.39330015544198993,
-          "r2_vs_har": 0.0353162138048988,
-          "har_r2_vs_media": 0.3710894147491053,
-          "shrink": 0.542
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.3865784771917238,
+          "r2_vs_har": 0.020973485693184246,
+          "har_r2_vs_media": 0.3734372727968459,
+          "shrink": 0.304
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.46427665076884983,
-          "r2_vs_har": 0.010336797824235355,
-          "har_r2_vs_media": 0.4586811472293122,
-          "shrink": 1.0
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.4689226699059923,
+          "r2_vs_har": 0.02222067361159974,
+          "har_r2_vs_media": 0.4568535908243887,
+          "shrink": 0.927
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.5197690820949856,
-          "r2_vs_har": 0.0354986258939205,
-          "har_r2_vs_media": 0.5020941070715397,
-          "shrink": 0.678
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.5182081928155517,
+          "r2_vs_har": 0.03089519352378256,
+          "har_r2_vs_media": 0.5028486042327024,
+          "shrink": 0.772
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.3458169584635109,
-          "r2_vs_har": 0.034404658063003635,
-          "har_r2_vs_media": 0.32250808063739234,
-          "shrink": 0.433
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.3421211406146111,
+          "r2_vs_har": 0.03704550592452127,
+          "har_r2_vs_media": 0.3168120991875004,
+          "shrink": 0.501
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.45383323656224406,
-          "r2_vs_har": 0.0901521854501457,
-          "har_r2_vs_media": 0.39971635398391214,
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.45119924688591895,
+          "r2_vs_har": 0.0883968063325461,
+          "har_r2_vs_media": 0.39798285380483267,
           "shrink": 1.0
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.34387960946637897,
-          "r2_vs_har": 0.004609683282585597,
-          "har_r2_vs_media": 0.34084109568458876,
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.3440584118818988,
+          "r2_vs_har": 0.001730173723493711,
+          "har_r2_vs_media": 0.3429215520169244,
           "shrink": 1.0
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.22028680995728234,
-          "r2_vs_har": 0.008566008419165438,
-          "har_r2_vs_media": 0.21355007326360642,
-          "shrink": 0.806
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.22566137028197264,
+          "r2_vs_har": 0.013947031296542622,
+          "har_r2_vs_media": 0.21470889060230636,
+          "shrink": 0.854
         }
       ],
       "horizon": 1,
@@ -714,28 +714,28 @@
     "GOOGL@h5": {
       "verdict": "NO-GO",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.482492,
-        "har_r2_vs_media": 0.474367,
-        "r2_vs_har": 0.015457,
-        "qlike": 0.29606,
-        "qlike_har": 0.288253,
-        "qlike_mejora": -0.027085,
-        "dm_stat": -1.067571,
-        "dm_pvalue": 0.285714,
+        "n": 4417,
+        "r2_vs_media": 0.482214,
+        "har_r2_vs_media": 0.474229,
+        "r2_vs_har": 0.015186,
+        "qlike": 0.294313,
+        "qlike_har": 0.287857,
+        "qlike_mejora": -0.022429,
+        "dm_stat": -1.099416,
+        "dm_pvalue": 0.271587,
         "mz": {
-          "alpha": -0.015103,
-          "beta": 0.992706,
-          "r2": 0.399073
+          "alpha": -0.01646,
+          "beta": 0.993066,
+          "r2": 0.398887
         },
         "mz_har": {
-          "alpha": -0.115212,
-          "beta": 0.945385,
-          "r2": 0.39295
+          "alpha": -0.116127,
+          "beta": 0.944997,
+          "r2": 0.392933
         },
-        "corr": 0.631722,
+        "corr": 0.631575,
         "folds_mejor_que_har": 0.625,
-        "shrink_medio": 0.207625
+        "shrink_medio": 0.19925
       },
       "checks": [
         {
@@ -753,13 +753,13 @@
         {
           "check": "la mejora no es ruido",
           "pass": false,
-          "detail": "Diebold-Mariano t=-1.07, p=0.2857",
+          "detail": "Diebold-Mariano t=-1.10, p=0.2716",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": false,
-          "detail": "QLIKE 0.2961 frente a 0.2883 de HAR",
+          "detail": "QLIKE 0.2943 frente a 0.2879 de HAR",
           "critical": true
         },
         {
@@ -779,74 +779,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.5172618829714766,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.5173863866067658,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.5172618829714766,
+          "har_r2_vs_media": 0.5173863866067658,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.5058355984404173,
-          "r2_vs_har": 0.019100371250264758,
-          "har_r2_vs_media": 0.4962130812614848,
-          "shrink": 0.041
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.5096136228970389,
+          "r2_vs_har": 0.024369710638980746,
+          "har_r2_vs_media": 0.49736454223439963,
+          "shrink": 0.053
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.5406271594500152,
-          "r2_vs_har": 0.06405009241188053,
-          "har_r2_vs_media": 0.5091907837955152,
-          "shrink": 0.441
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.536081836680943,
+          "r2_vs_har": 0.05978082636943849,
+          "har_r2_vs_media": 0.5065850853395344,
+          "shrink": 0.411
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.5668130491525432,
-          "r2_vs_har": -0.01628012099113252,
-          "har_r2_vs_media": 0.5737524114660544,
-          "shrink": 0.471
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.5706878184152928,
+          "r2_vs_har": -0.014817210584786134,
+          "har_r2_vs_media": 0.5769561482532237,
+          "shrink": 0.481
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.3275561352384394,
-          "r2_vs_har": -0.0015623692651023369,
-          "har_r2_vs_media": 0.3286051019918339,
-          "shrink": 0.146
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.31412735627157307,
+          "r2_vs_har": -0.0018228123522965323,
+          "har_r2_vs_media": 0.31537529863391056,
+          "shrink": 0.149
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.46531724944497965,
-          "r2_vs_har": 0.032741841581391595,
-          "har_r2_vs_media": 0.4472181538078883,
-          "shrink": 0.199
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.46683497908001026,
+          "r2_vs_har": 0.02760905473978681,
+          "har_r2_vs_media": 0.4516968473237746,
+          "shrink": 0.149
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.5065827971389695,
-          "r2_vs_har": 0.00714598380556708,
-          "har_r2_vs_media": 0.5030314680578343,
-          "shrink": 0.171
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.5088563417890556,
+          "r2_vs_har": 0.009886272479666114,
+          "har_r2_vs_media": 0.5039522788548977,
+          "shrink": 0.186
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.3236346913749776,
-          "r2_vs_har": 0.013168049019755768,
-          "har_r2_vs_media": 0.3146094348149425,
-          "shrink": 0.192
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.3229941048656605,
+          "r2_vs_har": 0.013666448373531925,
+          "har_r2_vs_media": 0.3136136411278375,
+          "shrink": 0.165
         }
       ],
       "horizon": 5,
@@ -856,58 +856,58 @@
     "META@h1": {
       "verdict": "GO",
       "metrics": {
-        "n": 2558,
-        "r2_vs_media": 0.434342,
-        "har_r2_vs_media": 0.415581,
-        "r2_vs_har": 0.032102,
-        "qlike": 0.756667,
-        "qlike_har": 0.773541,
-        "qlike_mejora": 0.021814,
-        "dm_stat": -4.293266,
-        "dm_pvalue": 1.8e-05,
+        "n": 2564,
+        "r2_vs_media": 0.436255,
+        "har_r2_vs_media": 0.415296,
+        "r2_vs_har": 0.035845,
+        "qlike": 0.753713,
+        "qlike_har": 0.773659,
+        "qlike_mejora": 0.025781,
+        "dm_stat": -4.823167,
+        "dm_pvalue": 1e-06,
         "mz": {
-          "alpha": 0.03569,
-          "beta": 1.025464,
-          "r2": 0.395135
+          "alpha": 0.046799,
+          "beta": 1.028839,
+          "r2": 0.396766
         },
         "mz_har": {
-          "alpha": 0.028663,
-          "beta": 1.016783,
-          "r2": 0.374794
+          "alpha": 0.027307,
+          "beta": 1.015975,
+          "r2": 0.374106
         },
-        "corr": 0.628598,
+        "corr": 0.629893,
         "folds_mejor_que_har": 1.0,
-        "shrink_medio": 0.788625
+        "shrink_medio": 0.849875
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.434",
+          "detail": "R2 frente a la media = 0.436",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.032 (HAR da 0.416 sobre la media)",
+          "detail": "R2 frente a HAR = 0.036 (HAR da 0.415 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-4.29, p=0.0000",
+          "detail": "Diebold-Mariano t=-4.82, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.7567 frente a 0.7735 de HAR",
+          "detail": "QLIKE 0.7537 frente a 0.7737 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.025 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.029 (ideal 1.0)",
           "critical": false
         },
         {
@@ -921,74 +921,74 @@
         {
           "fold": 0,
           "test_start": "2016-06-23",
-          "test_end": "2017-09-27",
-          "r2_vs_media": 0.6920338882214829,
-          "r2_vs_har": 0.02543218343894782,
-          "har_r2_vs_media": 0.6839972482723327,
+          "test_end": "2017-09-28",
+          "r2_vs_media": 0.6929774318720682,
+          "r2_vs_har": 0.02760788542669146,
+          "har_r2_vs_media": 0.6842605328379744,
           "shrink": 1.0
         },
         {
           "fold": 1,
-          "test_start": "2017-09-28",
-          "test_end": "2019-01-04",
-          "r2_vs_media": 0.3844905457249653,
-          "r2_vs_har": 0.03426631052167595,
-          "har_r2_vs_media": 0.3626509450990322,
+          "test_start": "2017-09-29",
+          "test_end": "2019-01-08",
+          "r2_vs_media": 0.3926808689375315,
+          "r2_vs_har": 0.04954983907282795,
+          "har_r2_vs_media": 0.36101948736583556,
           "shrink": 1.0
         },
         {
           "fold": 2,
-          "test_start": "2019-01-07",
-          "test_end": "2020-04-13",
-          "r2_vs_media": 0.3728242877589214,
-          "r2_vs_har": 0.01828040093574368,
-          "har_r2_vs_media": 0.3611457764122439,
-          "shrink": 0.725
+          "test_start": "2019-01-09",
+          "test_end": "2020-04-16",
+          "r2_vs_media": 0.37560990258629245,
+          "r2_vs_har": 0.01957676186082513,
+          "har_r2_vs_media": 0.36314229087553207,
+          "shrink": 0.767
         },
         {
           "fold": 3,
-          "test_start": "2020-04-14",
-          "test_end": "2021-07-19",
-          "r2_vs_media": 0.3059784447516829,
-          "r2_vs_har": 0.01757824440855016,
-          "har_r2_vs_media": 0.29356047817722275,
-          "shrink": 0.824
+          "test_start": "2020-04-17",
+          "test_end": "2021-07-23",
+          "r2_vs_media": 0.29644022380619606,
+          "r2_vs_har": 0.018029884096008475,
+          "har_r2_vs_media": 0.2835222123372725,
+          "shrink": 0.85
         },
         {
           "fold": 4,
-          "test_start": "2021-07-20",
-          "test_end": "2022-10-21",
-          "r2_vs_media": 0.5186519100188496,
-          "r2_vs_har": 0.032468812257095636,
-          "har_r2_vs_media": 0.5024986314869513,
-          "shrink": 0.7
+          "test_start": "2021-07-26",
+          "test_end": "2022-10-28",
+          "r2_vs_media": 0.5249151885726615,
+          "r2_vs_har": 0.02145838632919117,
+          "har_r2_vs_media": 0.514497079337127,
+          "shrink": 0.801
         },
         {
           "fold": 5,
-          "test_start": "2022-10-24",
-          "test_end": "2024-01-31",
-          "r2_vs_media": 0.32889332121964165,
-          "r2_vs_har": 0.010195386571603238,
-          "har_r2_vs_media": 0.3219806518623519,
-          "shrink": 0.535
+          "test_start": "2022-10-31",
+          "test_end": "2024-02-08",
+          "r2_vs_media": 0.26913324103379654,
+          "r2_vs_har": 0.020756258850882392,
+          "har_r2_vs_media": 0.2536416335849644,
+          "shrink": 0.687
         },
         {
           "fold": 6,
-          "test_start": "2024-02-01",
-          "test_end": "2025-05-09",
-          "r2_vs_media": 0.2746334098080442,
-          "r2_vs_har": 0.04612459907220512,
-          "har_r2_vs_media": 0.23955834327374215,
-          "shrink": 0.631
+          "test_start": "2024-02-09",
+          "test_end": "2025-05-20",
+          "r2_vs_media": 0.301951809004254,
+          "r2_vs_har": 0.0631844225241146,
+          "har_r2_vs_media": 0.2548712812007926,
+          "shrink": 0.694
         },
         {
           "fold": 7,
-          "test_start": "2025-05-12",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.12801181494631153,
-          "r2_vs_har": 0.06370132602070222,
-          "har_r2_vs_media": 0.06868586991828984,
-          "shrink": 0.894
+          "test_start": "2025-05-21",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.13325890179506095,
+          "r2_vs_har": 0.06078226683219068,
+          "har_r2_vs_media": 0.077167021451373,
+          "shrink": 1.0
         }
       ],
       "horizon": 1,
@@ -998,64 +998,64 @@
     "META@h5": {
       "verdict": "GO",
       "metrics": {
-        "n": 2556,
-        "r2_vs_media": 0.481345,
-        "har_r2_vs_media": 0.466085,
-        "r2_vs_har": 0.02858,
-        "qlike": 0.416959,
-        "qlike_har": 0.43019,
-        "qlike_mejora": 0.030756,
-        "dm_stat": -3.94256,
-        "dm_pvalue": 8.1e-05,
+        "n": 2561,
+        "r2_vs_media": 0.483563,
+        "har_r2_vs_media": 0.466378,
+        "r2_vs_har": 0.032205,
+        "qlike": 0.418947,
+        "qlike_har": 0.430136,
+        "qlike_mejora": 0.026013,
+        "dm_stat": -4.064543,
+        "dm_pvalue": 4.8e-05,
         "mz": {
-          "alpha": 0.059022,
-          "beta": 1.036235,
-          "r2": 0.43148
+          "alpha": 0.085509,
+          "beta": 1.048072,
+          "r2": 0.434246
         },
         "mz_har": {
-          "alpha": 0.019249,
-          "beta": 1.008912,
-          "r2": 0.414323
+          "alpha": 0.019689,
+          "beta": 1.00895,
+          "r2": 0.41405
         },
-        "corr": 0.656871,
-        "folds_mejor_que_har": 0.75,
-        "shrink_medio": 0.12125
+        "corr": 0.658973,
+        "folds_mejor_que_har": 0.625,
+        "shrink_medio": 0.120125
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.481",
+          "detail": "R2 frente a la media = 0.484",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.029 (HAR da 0.466 sobre la media)",
+          "detail": "R2 frente a HAR = 0.032 (HAR da 0.466 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-3.94, p=0.0001",
+          "detail": "Diebold-Mariano t=-4.06, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.4170 frente a 0.4302 de HAR",
+          "detail": "QLIKE 0.4189 frente a 0.4301 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.036 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.048 (ideal 1.0)",
           "critical": false
         },
         {
           "check": "consistente entre folds",
           "pass": true,
-          "detail": "75% de folds por encima de HAR",
+          "detail": "62% de folds por encima de HAR",
           "critical": true
         }
       ],
@@ -1063,74 +1063,74 @@
         {
           "fold": 0,
           "test_start": "2016-06-23",
-          "test_end": "2017-09-27",
-          "r2_vs_media": 0.7555616530689987,
+          "test_end": "2017-09-28",
+          "r2_vs_media": 0.7558939180841481,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.7555616530689987,
+          "har_r2_vs_media": 0.7558939180841481,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2017-09-28",
-          "test_end": "2019-01-04",
-          "r2_vs_media": 0.26277980861117123,
+          "test_start": "2017-09-29",
+          "test_end": "2019-01-08",
+          "r2_vs_media": 0.25852251706071183,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.26277980861117123,
+          "har_r2_vs_media": 0.25852251706071183,
           "shrink": 0.0
         },
         {
           "fold": 2,
-          "test_start": "2019-01-07",
-          "test_end": "2020-04-13",
-          "r2_vs_media": 0.31489287615163286,
-          "r2_vs_har": 0.01618202489619569,
-          "har_r2_vs_media": 0.30362410406652685,
-          "shrink": 0.047
+          "test_start": "2019-01-09",
+          "test_end": "2020-04-16",
+          "r2_vs_media": 0.32330764200784623,
+          "r2_vs_har": 0.02130789163683422,
+          "har_r2_vs_media": 0.3085748293976722,
+          "shrink": 0.064
         },
         {
           "fold": 3,
-          "test_start": "2020-04-14",
-          "test_end": "2021-07-19",
-          "r2_vs_media": 0.32664699082888615,
-          "r2_vs_har": 0.004462758508138043,
-          "har_r2_vs_media": 0.3236285081991901,
-          "shrink": 0.136
+          "test_start": "2020-04-17",
+          "test_end": "2021-07-23",
+          "r2_vs_media": 0.3152587863043954,
+          "r2_vs_har": 0.0023986566882885363,
+          "har_r2_vs_media": 0.3136123780442327,
+          "shrink": 0.117
         },
         {
           "fold": 4,
-          "test_start": "2021-07-20",
-          "test_end": "2022-10-21",
-          "r2_vs_media": 0.6302739996457613,
-          "r2_vs_har": 0.029164780876189456,
-          "har_r2_vs_media": 0.619167091313477,
-          "shrink": 0.189
+          "test_start": "2021-07-26",
+          "test_end": "2022-10-28",
+          "r2_vs_media": 0.6175364932002789,
+          "r2_vs_har": -0.0025855256441487118,
+          "har_r2_vs_media": 0.6185228122518596,
+          "shrink": 0.106
         },
         {
           "fold": 5,
-          "test_start": "2022-10-24",
-          "test_end": "2024-01-31",
-          "r2_vs_media": 0.32344949127971967,
-          "r2_vs_har": 0.025027729934096632,
-          "har_r2_vs_media": 0.3060823066541689,
-          "shrink": 0.11
+          "test_start": "2022-10-31",
+          "test_end": "2024-02-08",
+          "r2_vs_media": 0.257383694342738,
+          "r2_vs_har": 0.033516293993331336,
+          "har_r2_vs_media": 0.23163080655998358,
+          "shrink": 0.105
         },
         {
           "fold": 6,
-          "test_start": "2024-02-01",
-          "test_end": "2025-05-09",
-          "r2_vs_media": 0.3476322471811826,
-          "r2_vs_har": 0.042751725534201035,
-          "har_r2_vs_media": 0.3184968098449933,
-          "shrink": 0.199
+          "test_start": "2024-02-09",
+          "test_end": "2025-05-20",
+          "r2_vs_media": 0.35885060407210545,
+          "r2_vs_har": 0.05451566822794229,
+          "har_r2_vs_media": 0.3218825797713313,
+          "shrink": 0.15
         },
         {
           "fold": 7,
-          "test_start": "2025-05-12",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.1751916477479446,
-          "r2_vs_har": 0.12104834749316506,
-          "har_r2_vs_media": 0.061599861722039906,
-          "shrink": 0.289
+          "test_start": "2025-05-21",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.23262201966260265,
+          "r2_vs_har": 0.16281334496257394,
+          "har_r2_vs_media": 0.08338483930672302,
+          "shrink": 0.419
         }
       ],
       "horizon": 5,
@@ -1140,52 +1140,52 @@
     "MSFT@h1": {
       "verdict": "GO",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.344117,
-        "har_r2_vs_media": 0.32304,
-        "r2_vs_har": 0.031135,
-        "qlike": 0.529345,
-        "qlike_har": 0.552913,
-        "qlike_mejora": 0.042625,
-        "dm_stat": -5.155019,
-        "dm_pvalue": 0.0,
+        "n": 4420,
+        "r2_vs_media": 0.342475,
+        "har_r2_vs_media": 0.322542,
+        "r2_vs_har": 0.029423,
+        "qlike": 0.531,
+        "qlike_har": 0.552732,
+        "qlike_mejora": 0.039316,
+        "dm_stat": -4.787634,
+        "dm_pvalue": 2e-06,
         "mz": {
-          "alpha": -0.005111,
-          "beta": 0.997335,
-          "r2": 0.333464
+          "alpha": -0.005415,
+          "beta": 0.997035,
+          "r2": 0.331819
         },
         "mz_har": {
-          "alpha": -0.067516,
-          "beta": 0.966098,
-          "r2": 0.312436
+          "alpha": -0.06863,
+          "beta": 0.96552,
+          "r2": 0.311967
         },
-        "corr": 0.577463,
+        "corr": 0.576037,
         "folds_mejor_que_har": 1.0,
-        "shrink_medio": 0.771375
+        "shrink_medio": 0.745375
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.344",
+          "detail": "R2 frente a la media = 0.342",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.031 (HAR da 0.323 sobre la media)",
+          "detail": "R2 frente a HAR = 0.029 (HAR da 0.323 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-5.16, p=0.0000",
+          "detail": "Diebold-Mariano t=-4.79, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.5293 frente a 0.5529 de HAR",
+          "detail": "QLIKE 0.5310 frente a 0.5527 de HAR",
           "critical": true
         },
         {
@@ -1205,74 +1205,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.3718849431930743,
-          "r2_vs_har": 0.005397206757594586,
-          "har_r2_vs_media": 0.3684764801843453,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.3709739147666652,
+          "r2_vs_har": 0.005910297302848866,
+          "har_r2_vs_media": 0.36723408005668956,
           "shrink": 1.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.21829604118808665,
-          "r2_vs_har": 0.017147893398743674,
-          "har_r2_vs_media": 0.2046575944013812,
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.21816298558019864,
+          "r2_vs_har": 0.018475750818928383,
+          "har_r2_vs_media": 0.2034460533480228,
           "shrink": 1.0
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.14666886421315062,
-          "r2_vs_har": 0.009999517840906913,
-          "har_r2_vs_media": 0.13804977758614967,
-          "shrink": 0.51
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.1404104193384461,
+          "r2_vs_har": 0.0016419162767670192,
+          "har_r2_vs_media": 0.13899672404530639,
+          "shrink": 0.469
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.4081078198102307,
-          "r2_vs_har": 0.012661638329256153,
-          "har_r2_vs_media": 0.40051738778974666,
-          "shrink": 0.21
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.40818735422645747,
+          "r2_vs_har": 0.009313628307060728,
+          "har_r2_vs_media": 0.4026236125947502,
+          "shrink": 0.135
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.35181700908916713,
-          "r2_vs_har": 0.03620605127741228,
-          "har_r2_vs_media": 0.3274672540018181,
-          "shrink": 0.663
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.3489063635472007,
+          "r2_vs_har": 0.03796113940081136,
+          "har_r2_vs_media": 0.3232148272604317,
+          "shrink": 0.675
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.5458776894235304,
-          "r2_vs_har": 0.07670211689218864,
-          "har_r2_vs_media": 0.5081518988780755,
-          "shrink": 0.788
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.5454771446980886,
+          "r2_vs_har": 0.07481746202971107,
+          "har_r2_vs_media": 0.5087208884215799,
+          "shrink": 0.757
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.30377333829996556,
-          "r2_vs_har": 0.03988849729987809,
-          "har_r2_vs_media": 0.274848119471503,
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.3071295588552342,
+          "r2_vs_har": 0.04451288541546172,
+          "har_r2_vs_media": 0.2748510884460882,
           "shrink": 1.0
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.2803387735923911,
-          "r2_vs_har": 0.05047442318249418,
-          "har_r2_vs_media": 0.2420833688127979,
-          "shrink": 1.0
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.2743303457342062,
+          "r2_vs_har": 0.04406891899376786,
+          "har_r2_vs_media": 0.2408765980263562,
+          "shrink": 0.927
         }
       ],
       "horizon": 1,
@@ -1280,66 +1280,66 @@
       "ticker": "MSFT"
     },
     "MSFT@h5": {
-      "verdict": "GO",
+      "verdict": "REVISAR",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.394928,
-        "har_r2_vs_media": 0.386535,
-        "r2_vs_har": 0.013681,
-        "qlike": 0.267251,
-        "qlike_har": 0.274857,
-        "qlike_mejora": 0.02767,
-        "dm_stat": -2.12689,
-        "dm_pvalue": 0.033429,
+        "n": 4417,
+        "r2_vs_media": 0.39275,
+        "har_r2_vs_media": 0.386448,
+        "r2_vs_har": 0.010272,
+        "qlike": 0.267561,
+        "qlike_har": 0.274603,
+        "qlike_mejora": 0.025642,
+        "dm_stat": -1.362795,
+        "dm_pvalue": 0.172947,
         "mz": {
-          "alpha": -0.095484,
-          "beta": 0.950456,
-          "r2": 0.380817
+          "alpha": -0.109278,
+          "beta": 0.943951,
+          "r2": 0.379114
         },
         "mz_har": {
-          "alpha": -0.169383,
-          "beta": 0.906785,
-          "r2": 0.374982
+          "alpha": -0.169457,
+          "beta": 0.906733,
+          "r2": 0.374968
         },
-        "corr": 0.617104,
-        "folds_mejor_que_har": 0.75,
-        "shrink_medio": 0.153
+        "corr": 0.615722,
+        "folds_mejor_que_har": 0.625,
+        "shrink_medio": 0.156125
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.395",
+          "detail": "R2 frente a la media = 0.393",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.014 (HAR da 0.387 sobre la media)",
+          "detail": "R2 frente a HAR = 0.010 (HAR da 0.386 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
-          "pass": true,
-          "detail": "Diebold-Mariano t=-2.13, p=0.0334",
+          "pass": false,
+          "detail": "Diebold-Mariano t=-1.36, p=0.1729",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.2673 frente a 0.2749 de HAR",
+          "detail": "QLIKE 0.2676 frente a 0.2746 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 0.950 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 0.944 (ideal 1.0)",
           "critical": false
         },
         {
           "check": "consistente entre folds",
           "pass": true,
-          "detail": "75% de folds por encima de HAR",
+          "detail": "62% de folds por encima de HAR",
           "critical": true
         }
       ],
@@ -1347,74 +1347,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.4931899698173259,
-          "r2_vs_har": 0.008162517479691545,
-          "har_r2_vs_media": 0.48901907911884457,
-          "shrink": 0.062
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.48427030221454326,
+          "r2_vs_har": -0.008792969414527008,
+          "har_r2_vs_media": 0.4887655709131571,
+          "shrink": 0.135
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.30336999111587515,
-          "r2_vs_har": -0.0181767533038526,
-          "har_r2_vs_media": 0.3158064092274253,
-          "shrink": 0.136
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.2996178572091843,
+          "r2_vs_har": -0.021546553956830916,
+          "har_r2_vs_media": 0.3143903818401871,
+          "shrink": 0.186
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.07846026957410412,
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.08051682368860191,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.07846026957410412,
+          "har_r2_vs_media": 0.08051682368860191,
           "shrink": 0.0
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.43717422482975754,
-          "r2_vs_har": 0.011506495223318591,
-          "har_r2_vs_media": 0.4306226875032477,
-          "shrink": 0.163
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.444392039623999,
+          "r2_vs_har": 0.01454413762565665,
+          "har_r2_vs_media": 0.43619193756955577,
+          "shrink": 0.17
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.3285958782907522,
-          "r2_vs_har": 0.010659964017930013,
-          "har_r2_vs_media": 0.32136161755267745,
-          "shrink": 0.111
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.30554474036648005,
+          "r2_vs_har": 0.005045795530642216,
+          "har_r2_vs_media": 0.3020228905873149,
+          "shrink": 0.159
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.5690459712485927,
-          "r2_vs_har": 0.006223818948370319,
-          "har_r2_vs_media": 0.5663469934494052,
-          "shrink": 0.09
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.5751371238288222,
+          "r2_vs_har": 0.0050841939858853324,
+          "har_r2_vs_media": 0.5729660001349397,
+          "shrink": 0.106
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.44147290913749226,
-          "r2_vs_har": 0.029554920914843352,
-          "har_r2_vs_media": 0.4244629573586647,
-          "shrink": 0.193
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.44125783334525437,
+          "r2_vs_har": 0.025639430283736053,
+          "har_r2_vs_media": 0.42655503104209913,
+          "shrink": 0.167
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.33565498463487187,
-          "r2_vs_har": 0.05403551324071665,
-          "har_r2_vs_media": 0.2977061774897456,
-          "shrink": 0.469
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.3319783745881022,
+          "r2_vs_har": 0.050719579624760924,
+          "har_r2_vs_media": 0.2962863121649165,
+          "shrink": 0.326
         }
       ],
       "horizon": 5,
@@ -1424,28 +1424,28 @@
     "NVDA@h1": {
       "verdict": "GO",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.43412,
-        "har_r2_vs_media": 0.422918,
-        "r2_vs_har": 0.019412,
-        "qlike": 0.49256,
-        "qlike_har": 0.520939,
-        "qlike_mejora": 0.054477,
-        "dm_stat": -3.413591,
-        "dm_pvalue": 0.000641,
+        "n": 4420,
+        "r2_vs_media": 0.433987,
+        "har_r2_vs_media": 0.422557,
+        "r2_vs_har": 0.019794,
+        "qlike": 0.496202,
+        "qlike_har": 0.52043,
+        "qlike_mejora": 0.046554,
+        "dm_stat": -3.664835,
+        "dm_pvalue": 0.000247,
         "mz": {
-          "alpha": 0.025731,
-          "beta": 1.037592,
-          "r2": 0.381167
+          "alpha": 0.027913,
+          "beta": 1.036462,
+          "r2": 0.380416
         },
         "mz_har": {
-          "alpha": -0.025306,
-          "beta": 0.989069,
-          "r2": 0.366442
+          "alpha": -0.024809,
+          "beta": 0.98967,
+          "r2": 0.366097
         },
-        "corr": 0.617387,
+        "corr": 0.616779,
         "folds_mejor_que_har": 0.75,
-        "shrink_medio": 0.76275
+        "shrink_medio": 0.743625
       },
       "checks": [
         {
@@ -1457,25 +1457,25 @@
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.019 (HAR da 0.423 sobre la media)",
+          "detail": "R2 frente a HAR = 0.020 (HAR da 0.423 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-3.41, p=0.0006",
+          "detail": "Diebold-Mariano t=-3.66, p=0.0002",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.4926 frente a 0.5209 de HAR",
+          "detail": "QLIKE 0.4962 frente a 0.5204 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.038 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.036 (ideal 1.0)",
           "critical": false
         },
         {
@@ -1489,73 +1489,73 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.21911767821180383,
-          "r2_vs_har": -0.0010525413864976851,
-          "har_r2_vs_media": 0.21993872498775846,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.21965088633154484,
+          "r2_vs_har": -0.0003686548833303771,
+          "har_r2_vs_media": 0.2199384598276276,
           "shrink": 1.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.5007024033775507,
-          "r2_vs_har": 0.0035707424428229606,
-          "har_r2_vs_media": 0.4989131512993549,
-          "shrink": 0.216
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.5022442666173106,
+          "r2_vs_har": 0.002982282391550184,
+          "har_r2_vs_media": 0.5007553781725586,
+          "shrink": 0.147
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.6706225971269266,
-          "r2_vs_har": -0.01584155158872913,
-          "har_r2_vs_media": 0.6757590764446066,
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.6730057967869902,
+          "r2_vs_har": -0.005487276163491428,
+          "har_r2_vs_media": 0.6747903121552372,
           "shrink": 1.0
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.3124934813120701,
-          "r2_vs_har": 0.008134514378662083,
-          "har_r2_vs_media": 0.3068550840265879,
-          "shrink": 0.42
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.3092376330601895,
+          "r2_vs_har": 0.009134996030662035,
+          "har_r2_vs_media": 0.30286934731505966,
+          "shrink": 0.314
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.32666091916742235,
-          "r2_vs_har": 0.029827082162898533,
-          "har_r2_vs_media": 0.30595972279486394,
-          "shrink": 0.516
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.32321843043364273,
+          "r2_vs_har": 0.031971667218546496,
+          "har_r2_vs_media": 0.30086594922098164,
+          "shrink": 0.559
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.4364989178893456,
-          "r2_vs_har": 0.04469562426133178,
-          "har_r2_vs_media": 0.4101345116576698,
-          "shrink": 0.991
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.44282835013505684,
+          "r2_vs_har": 0.04054802627870413,
+          "har_r2_vs_media": 0.4192813552679273,
+          "shrink": 1.0
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.37868465913367966,
-          "r2_vs_har": 0.040452354467165774,
-          "har_r2_vs_media": 0.35249141222028046,
-          "shrink": 0.959
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.3775582319430707,
+          "r2_vs_har": 0.04230828325544822,
+          "har_r2_vs_media": 0.3500604033907968,
+          "shrink": 0.929
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.3095912743261048,
-          "r2_vs_har": 0.04714194641739744,
-          "har_r2_vs_media": 0.2754338140103213,
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.30313859483170014,
+          "r2_vs_har": 0.03851557996983612,
+          "har_r2_vs_media": 0.2752234038837179,
           "shrink": 1.0
         }
       ],
@@ -1566,34 +1566,34 @@
     "NVDA@h5": {
       "verdict": "NO-GO",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.515958,
-        "har_r2_vs_media": 0.518374,
-        "r2_vs_har": -0.005016,
-        "qlike": 0.259845,
-        "qlike_har": 0.267135,
-        "qlike_mejora": 0.02729,
-        "dm_stat": 0.492225,
-        "dm_pvalue": 0.62256,
+        "n": 4417,
+        "r2_vs_media": 0.515401,
+        "har_r2_vs_media": 0.517705,
+        "r2_vs_har": -0.004779,
+        "qlike": 0.26055,
+        "qlike_har": 0.26733,
+        "qlike_mejora": 0.025361,
+        "dm_stat": 0.494239,
+        "dm_pvalue": 0.621138,
         "mz": {
-          "alpha": -0.022719,
-          "beta": 1.003099,
-          "r2": 0.446729
+          "alpha": -0.026719,
+          "beta": 0.999552,
+          "r2": 0.445966
         },
         "mz_har": {
-          "alpha": -0.089747,
-          "beta": 0.939126,
-          "r2": 0.448376
+          "alpha": -0.090268,
+          "beta": 0.938621,
+          "r2": 0.447626
         },
-        "corr": 0.668378,
-        "folds_mejor_que_har": 0.5,
-        "shrink_medio": 0.169
+        "corr": 0.667806,
+        "folds_mejor_que_har": 0.625,
+        "shrink_medio": 0.163625
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.516",
+          "detail": "R2 frente a la media = 0.515",
           "critical": true
         },
         {
@@ -1605,25 +1605,25 @@
         {
           "check": "la mejora no es ruido",
           "pass": false,
-          "detail": "Diebold-Mariano t=0.49, p=0.6226",
+          "detail": "Diebold-Mariano t=0.49, p=0.6211",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.2598 frente a 0.2671 de HAR",
+          "detail": "QLIKE 0.2606 frente a 0.2673 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.003 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.000 (ideal 1.0)",
           "critical": false
         },
         {
           "check": "consistente entre folds",
-          "pass": false,
-          "detail": "50% de folds por encima de HAR",
+          "pass": true,
+          "detail": "62% de folds por encima de HAR",
           "critical": true
         }
       ],
@@ -1631,74 +1631,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.336594396718928,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.3363733926557646,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.336594396718928,
+          "har_r2_vs_media": 0.3363733926557646,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.6797242102042624,
-          "r2_vs_har": 0.046851022552030996,
-          "har_r2_vs_media": 0.6639813949617117,
-          "shrink": 0.108
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.680338449088372,
+          "r2_vs_har": 0.04462161130942477,
+          "har_r2_vs_media": 0.6654084342961217,
+          "shrink": 0.11
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.7330316655981837,
-          "r2_vs_har": -0.14742679012015936,
-          "har_r2_vs_media": 0.7673330127023972,
-          "shrink": 0.347
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.7331598061429262,
+          "r2_vs_har": -0.14478879887572216,
+          "har_r2_vs_media": 0.7669088008904934,
+          "shrink": 0.352
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.2675975113310949,
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.26838254660041105,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.2675975113310949,
+          "har_r2_vs_media": 0.26838254660041105,
           "shrink": 0.0
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.30863205423347906,
-          "r2_vs_har": -0.006946117506781091,
-          "har_r2_vs_media": 0.313401249832154,
-          "shrink": 0.218
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.2945958444503449,
+          "r2_vs_har": 0.001998475344882622,
+          "har_r2_vs_media": 0.2931832886794198,
+          "shrink": 0.211
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.42385712249330965,
-          "r2_vs_har": 0.026882513928473184,
-          "har_r2_vs_media": 0.4079410906152987,
-          "shrink": 0.177
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.43800667925414805,
+          "r2_vs_har": 0.01896979921605846,
+          "har_r2_vs_media": 0.4271396331155116,
+          "shrink": 0.143
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.5186522812501164,
-          "r2_vs_har": 0.029941909426878466,
-          "har_r2_vs_media": 0.5037949547274041,
-          "shrink": 0.232
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.5143353280511102,
+          "r2_vs_har": 0.02774665515354413,
+          "har_r2_vs_media": 0.5004751852763345,
+          "shrink": 0.221
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.3884443708163279,
-          "r2_vs_har": 0.04771158559738775,
-          "har_r2_vs_media": 0.35780419048013723,
-          "shrink": 0.27
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.3834120137991759,
+          "r2_vs_har": 0.0476589737942561,
+          "har_r2_vs_media": 0.3525554720062891,
+          "shrink": 0.272
         }
       ],
       "horizon": 5,
@@ -1706,60 +1706,60 @@
       "ticker": "NVDA"
     },
     "QQQ@h1": {
-      "verdict": "GO",
+      "verdict": "REVISAR",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.482089,
-        "har_r2_vs_media": 0.453889,
-        "r2_vs_har": 0.051638,
-        "qlike": 0.437571,
-        "qlike_har": 0.517044,
-        "qlike_mejora": 0.153705,
-        "dm_stat": -1.988446,
-        "dm_pvalue": 0.046762,
+        "n": 4420,
+        "r2_vs_media": 0.481014,
+        "har_r2_vs_media": 0.453447,
+        "r2_vs_har": 0.050439,
+        "qlike": 0.437325,
+        "qlike_har": 0.517105,
+        "qlike_mejora": 0.154281,
+        "dm_stat": -1.933572,
+        "dm_pvalue": 0.053166,
         "mz": {
-          "alpha": -0.128312,
-          "beta": 0.958775,
-          "r2": 0.463412
+          "alpha": -0.122265,
+          "beta": 0.961487,
+          "r2": 0.462209
         },
         "mz_har": {
-          "alpha": -0.036155,
-          "beta": 0.986323,
-          "r2": 0.428991
+          "alpha": -0.036568,
+          "beta": 0.986281,
+          "r2": 0.428602
         },
-        "corr": 0.680744,
+        "corr": 0.67986,
         "folds_mejor_que_har": 0.875,
-        "shrink_medio": 0.937375
+        "shrink_medio": 0.941875
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.482",
+          "detail": "R2 frente a la media = 0.481",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.052 (HAR da 0.454 sobre la media)",
+          "detail": "R2 frente a HAR = 0.050 (HAR da 0.453 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
-          "pass": true,
-          "detail": "Diebold-Mariano t=-1.99, p=0.0468",
+          "pass": false,
+          "detail": "Diebold-Mariano t=-1.93, p=0.0532",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.4376 frente a 0.5170 de HAR",
+          "detail": "QLIKE 0.4373 frente a 0.5171 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 0.959 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 0.961 (ideal 1.0)",
           "critical": false
         },
         {
@@ -1773,74 +1773,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": -0.026957644912712242,
-          "r2_vs_har": -0.6225766369252526,
-          "har_r2_vs_media": 0.36708219412133614,
-          "shrink": 0.868
+          "test_end": "2011-04-15",
+          "r2_vs_media": -0.029376370874791835,
+          "r2_vs_har": -0.6220638797030573,
+          "har_r2_vs_media": 0.36539097889089656,
+          "shrink": 0.837
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.49316661706300047,
-          "r2_vs_har": 0.12940024666746308,
-          "har_r2_vs_media": 0.4178342217570008,
-          "shrink": 0.887
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.49868051862033236,
+          "r2_vs_har": 0.1365962702068627,
+          "har_r2_vs_media": 0.41936840891366234,
+          "shrink": 0.988
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.56545074257858,
-          "r2_vs_har": 0.17762214797735176,
-          "har_r2_vs_media": 0.4715941627651562,
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.5604682476782337,
+          "r2_vs_har": 0.16749288903256732,
+          "har_r2_vs_media": 0.4720384408356595,
           "shrink": 1.0
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.600956642340022,
-          "r2_vs_har": 0.10887630131961656,
-          "har_r2_vs_media": 0.5522020587591828,
-          "shrink": 0.98
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.5997286039707361,
+          "r2_vs_har": 0.10752482284309772,
+          "har_r2_vs_media": 0.5515041692202787,
+          "shrink": 0.943
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.47446517190889426,
-          "r2_vs_har": 0.1400145417720432,
-          "har_r2_vs_media": 0.3889026575240043,
-          "shrink": 1.0
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.4655252429761214,
+          "r2_vs_har": 0.134984143301223,
+          "har_r2_vs_media": 0.38212143409297306,
+          "shrink": 0.981
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.629302670519579,
-          "r2_vs_har": 0.1431158530659563,
-          "har_r2_vs_media": 0.567389207973112,
-          "shrink": 0.994
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.6331038455580489,
+          "r2_vs_har": 0.14167380842640587,
+          "har_r2_vs_media": 0.5725446129410199,
+          "shrink": 1.0
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.49916588963416975,
-          "r2_vs_har": 0.08172891517825187,
-          "har_r2_vs_media": 0.454590132865775,
-          "shrink": 0.999
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.4971094516070529,
+          "r2_vs_har": 0.08251622944683168,
+          "har_r2_vs_media": 0.4518807149147228,
+          "shrink": 0.984
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.40707092438534065,
-          "r2_vs_har": 0.17027761779260375,
-          "har_r2_vs_media": 0.2853885970422676,
-          "shrink": 0.771
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.4091571542016229,
+          "r2_vs_har": 0.17397596966236106,
+          "har_r2_vs_media": 0.28471470066449656,
+          "shrink": 0.802
         }
       ],
       "horizon": 1,
@@ -1850,52 +1850,52 @@
     "QQQ@h5": {
       "verdict": "GO",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.587055,
-        "har_r2_vs_media": 0.562549,
-        "r2_vs_har": 0.056022,
-        "qlike": 0.272923,
-        "qlike_har": 0.286278,
-        "qlike_mejora": 0.04665,
-        "dm_stat": -4.811935,
-        "dm_pvalue": 1e-06,
+        "n": 4417,
+        "r2_vs_media": 0.585395,
+        "har_r2_vs_media": 0.562454,
+        "r2_vs_har": 0.052431,
+        "qlike": 0.271811,
+        "qlike_har": 0.286002,
+        "qlike_mejora": 0.04962,
+        "dm_stat": -4.344116,
+        "dm_pvalue": 1.4e-05,
         "mz": {
-          "alpha": 0.030826,
-          "beta": 1.016032,
-          "r2": 0.559363
+          "alpha": 0.023991,
+          "beta": 1.015816,
+          "r2": 0.558048
         },
         "mz_har": {
-          "alpha": -0.111144,
-          "beta": 0.949267,
-          "r2": 0.534609
+          "alpha": -0.111567,
+          "beta": 0.94918,
+          "r2": 0.534615
         },
-        "corr": 0.747906,
+        "corr": 0.747026,
         "folds_mejor_que_har": 0.875,
-        "shrink_medio": 0.31475
+        "shrink_medio": 0.293125
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.587",
+          "detail": "R2 frente a la media = 0.585",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.056 (HAR da 0.563 sobre la media)",
+          "detail": "R2 frente a HAR = 0.052 (HAR da 0.562 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-4.81, p=0.0000",
+          "detail": "Diebold-Mariano t=-4.34, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.2729 frente a 0.2863 de HAR",
+          "detail": "QLIKE 0.2718 frente a 0.2860 de HAR",
           "critical": true
         },
         {
@@ -1915,74 +1915,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.48434656538413623,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.484233350111711,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.48434656538413623,
+          "har_r2_vs_media": 0.484233350111711,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.6412896636146401,
-          "r2_vs_har": 0.08613251115722476,
-          "har_r2_vs_media": 0.6074810180198089,
-          "shrink": 0.334
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.6537490407967,
+          "r2_vs_har": 0.11877199096220148,
+          "har_r2_vs_media": 0.6070813051194697,
+          "shrink": 0.378
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.5672765499730053,
-          "r2_vs_har": 0.029388792895596483,
-          "har_r2_vs_media": 0.5541742699242819,
-          "shrink": 0.382
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.566543343588148,
+          "r2_vs_har": 0.02622842031613959,
+          "har_r2_vs_media": 0.5548682407094117,
+          "shrink": 0.395
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.6543314064422018,
-          "r2_vs_har": 0.03233592832724219,
-          "har_r2_vs_media": 0.6427803783597583,
-          "shrink": 0.213
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.650567427156826,
+          "r2_vs_har": 0.017437443485174287,
+          "har_r2_vs_media": 0.6443660807891762,
+          "shrink": 0.239
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.44363973795425404,
-          "r2_vs_har": 0.04189877172830858,
-          "har_r2_vs_media": 0.41930952009177747,
-          "shrink": 0.235
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.4193489402967281,
+          "r2_vs_har": 0.02953470561224336,
+          "har_r2_vs_media": 0.4016776663099624,
+          "shrink": 0.151
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.6370826244230533,
-          "r2_vs_har": 0.04282584160961722,
-          "har_r2_vs_media": 0.6208449921096479,
-          "shrink": 0.301
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.6419021687556444,
+          "r2_vs_har": 0.03363400102436609,
+          "har_r2_vs_media": 0.629438709946391,
+          "shrink": 0.284
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.7535661646768186,
-          "r2_vs_har": 0.1567232668789953,
-          "har_r2_vs_media": 0.7077663527948662,
-          "shrink": 0.565
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.7523737886993718,
+          "r2_vs_har": 0.1522555306793425,
+          "har_r2_vs_media": 0.707899938882451,
+          "shrink": 0.435
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.43165693598787824,
-          "r2_vs_har": 0.11690878303970975,
-          "har_r2_vs_media": 0.3564163553019707,
-          "shrink": 0.488
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.4295497408289328,
+          "r2_vs_har": 0.11534775982629719,
+          "har_r2_vs_media": 0.3551700507093517,
+          "shrink": 0.463
         }
       ],
       "horizon": 5,
@@ -1992,28 +1992,28 @@
     "SPY@h1": {
       "verdict": "GO",
       "metrics": {
-        "n": 4414,
-        "r2_vs_media": 0.563766,
-        "har_r2_vs_media": 0.491345,
-        "r2_vs_har": 0.142377,
-        "qlike": 0.48808,
-        "qlike_har": 0.549742,
-        "qlike_mejora": 0.112166,
-        "dm_stat": -11.335046,
+        "n": 4420,
+        "r2_vs_media": 0.564095,
+        "har_r2_vs_media": 0.491417,
+        "r2_vs_har": 0.142902,
+        "qlike": 0.487841,
+        "qlike_har": 0.549195,
+        "qlike_mejora": 0.111716,
+        "dm_stat": -11.597849,
         "dm_pvalue": 0.0,
         "mz": {
-          "alpha": 0.132385,
-          "beta": 1.048541,
-          "r2": 0.544012
+          "alpha": 0.128525,
+          "beta": 1.046677,
+          "r2": 0.544295
         },
         "mz_har": {
-          "alpha": -0.07654,
-          "beta": 0.972902,
-          "r2": 0.467165
+          "alpha": -0.07645,
+          "beta": 0.973015,
+          "r2": 0.46722
         },
-        "corr": 0.737572,
+        "corr": 0.737763,
         "folds_mejor_que_har": 0.875,
-        "shrink_medio": 0.770875
+        "shrink_medio": 0.761
       },
       "checks": [
         {
@@ -2025,25 +2025,25 @@
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.142 (HAR da 0.491 sobre la media)",
+          "detail": "R2 frente a HAR = 0.143 (HAR da 0.491 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-11.34, p=0.0000",
+          "detail": "Diebold-Mariano t=-11.60, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.4881 frente a 0.5497 de HAR",
+          "detail": "QLIKE 0.4878 frente a 0.5492 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.049 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.047 (ideal 1.0)",
           "critical": false
         },
         {
@@ -2057,74 +2057,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.5170109472152997,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.514605703721683,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.5170109472152997,
+          "har_r2_vs_media": 0.514605703721683,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.4855818123376989,
-          "r2_vs_har": 0.10572300540522839,
-          "har_r2_vs_media": 0.42476638583842574,
-          "shrink": 0.735
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.49230725900257677,
+          "r2_vs_har": 0.11630054719226024,
+          "har_r2_vs_media": 0.42549162004757024,
+          "shrink": 0.756
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.5876248640763573,
-          "r2_vs_har": 0.19425206159479813,
-          "har_r2_vs_media": 0.48820826431173103,
-          "shrink": 0.919
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.5923366058988899,
+          "r2_vs_har": 0.1998366567149812,
+          "har_r2_vs_media": 0.4905247815683802,
+          "shrink": 0.837
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.6623487562098841,
-          "r2_vs_har": 0.09817207935191219,
-          "har_r2_vs_media": 0.6255923818066456,
-          "shrink": 0.938
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.6550849408182018,
+          "r2_vs_har": 0.0812211691199406,
+          "har_r2_vs_media": 0.6245940289553487,
+          "shrink": 0.934
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.5415653389212275,
-          "r2_vs_har": 0.1592718384694437,
-          "har_r2_vs_media": 0.4547171344371451,
-          "shrink": 0.835
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.5354612663994489,
+          "r2_vs_har": 0.15819694589731403,
+          "har_r2_vs_media": 0.4481622140279321,
+          "shrink": 0.779
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.6467431349103381,
-          "r2_vs_har": 0.19573421173320338,
-          "har_r2_vs_media": 0.5607709910787886,
-          "shrink": 0.815
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.651612350045915,
+          "r2_vs_har": 0.19874139234470012,
+          "har_r2_vs_media": 0.5651994916178664,
+          "shrink": 0.839
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.4769982438362754,
-          "r2_vs_har": 0.12053929448137468,
-          "har_r2_vs_media": 0.40531537920695837,
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.4830172182671464,
+          "r2_vs_har": 0.13108008894295187,
+          "har_r2_vs_media": 0.40502827112807216,
           "shrink": 1.0
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-26",
-          "r2_vs_media": 0.47879733205300967,
-          "r2_vs_har": 0.22588388126933012,
-          "har_r2_vs_media": 0.326712549531181,
-          "shrink": 0.925
+          "test_start": "2024-06-17",
+          "test_end": "2026-09-03",
+          "r2_vs_media": 0.4775029428335038,
+          "r2_vs_har": 0.22083527097994182,
+          "har_r2_vs_media": 0.3294138739780591,
+          "shrink": 0.943
         }
       ],
       "horizon": 1,
@@ -2134,64 +2134,64 @@
     "SPY@h5": {
       "verdict": "GO",
       "metrics": {
-        "n": 4412,
-        "r2_vs_media": 0.622087,
-        "har_r2_vs_media": 0.589061,
-        "r2_vs_har": 0.080367,
-        "qlike": 0.289584,
-        "qlike_har": 0.308924,
-        "qlike_mejora": 0.062606,
-        "dm_stat": -6.360789,
+        "n": 4417,
+        "r2_vs_media": 0.621021,
+        "har_r2_vs_media": 0.589341,
+        "r2_vs_har": 0.077145,
+        "qlike": 0.28847,
+        "qlike_har": 0.308497,
+        "qlike_mejora": 0.064918,
+        "dm_stat": -6.179628,
         "dm_pvalue": 0.0,
         "mz": {
-          "alpha": 0.037503,
-          "beta": 1.016454,
-          "r2": 0.595634
+          "alpha": 0.03169,
+          "beta": 1.015366,
+          "r2": 0.594624
         },
         "mz_har": {
-          "alpha": -0.163827,
-          "beta": 0.934395,
-          "r2": 0.563252
+          "alpha": -0.163583,
+          "beta": 0.934561,
+          "r2": 0.563633
         },
-        "corr": 0.771773,
-        "folds_mejor_que_har": 0.875,
-        "shrink_medio": 0.359125
+        "corr": 0.771118,
+        "folds_mejor_que_har": 0.75,
+        "shrink_medio": 0.336
       },
       "checks": [
         {
           "check": "predice algo",
           "pass": true,
-          "detail": "R2 frente a la media = 0.622",
+          "detail": "R2 frente a la media = 0.621",
           "critical": true
         },
         {
           "check": "bate a HAR-RV",
           "pass": true,
-          "detail": "R2 frente a HAR = 0.080 (HAR da 0.589 sobre la media)",
+          "detail": "R2 frente a HAR = 0.077 (HAR da 0.589 sobre la media)",
           "critical": true
         },
         {
           "check": "la mejora no es ruido",
           "pass": true,
-          "detail": "Diebold-Mariano t=-6.36, p=0.0000",
+          "detail": "Diebold-Mariano t=-6.18, p=0.0000",
           "critical": true
         },
         {
           "check": "mejora también en QLIKE",
           "pass": true,
-          "detail": "QLIKE 0.2896 frente a 0.3089 de HAR",
+          "detail": "QLIKE 0.2885 frente a 0.3085 de HAR",
           "critical": true
         },
         {
           "check": "predicción bien escalada",
           "pass": true,
-          "detail": "Mincer-Zarnowitz beta = 1.016 (ideal 1.0)",
+          "detail": "Mincer-Zarnowitz beta = 1.015 (ideal 1.0)",
           "critical": false
         },
         {
           "check": "consistente entre folds",
           "pass": true,
-          "detail": "88% de folds por encima de HAR",
+          "detail": "75% de folds por encima de HAR",
           "critical": true
         }
       ],
@@ -2199,74 +2199,74 @@
         {
           "fold": 0,
           "test_start": "2009-02-09",
-          "test_end": "2011-04-14",
-          "r2_vs_media": 0.6739309126894969,
+          "test_end": "2011-04-15",
+          "r2_vs_media": 0.6736913291938749,
           "r2_vs_har": 0.0,
-          "har_r2_vs_media": 0.6739309126894969,
+          "har_r2_vs_media": 0.6736913291938749,
           "shrink": 0.0
         },
         {
           "fold": 1,
-          "test_start": "2011-04-15",
-          "test_end": "2013-06-25",
-          "r2_vs_media": 0.6519807742011103,
-          "r2_vs_har": 0.08458164603714469,
-          "har_r2_vs_media": 0.6198249420144233,
-          "shrink": 0.286
+          "test_start": "2011-04-18",
+          "test_end": "2013-06-27",
+          "r2_vs_media": 0.6463551875269353,
+          "r2_vs_har": 0.07694170279065637,
+          "har_r2_vs_media": 0.616877055823853,
+          "shrink": 0.284
         },
         {
           "fold": 2,
-          "test_start": "2013-06-26",
-          "test_end": "2015-09-01",
-          "r2_vs_media": 0.5890651122093127,
-          "r2_vs_har": 0.08063329543624864,
-          "har_r2_vs_media": 0.5530239612215673,
-          "shrink": 0.438
+          "test_start": "2013-06-28",
+          "test_end": "2015-09-04",
+          "r2_vs_media": 0.592568010609688,
+          "r2_vs_har": 0.08301513395283777,
+          "har_r2_vs_media": 0.5556829731044253,
+          "shrink": 0.404
         },
         {
           "fold": 3,
-          "test_start": "2015-09-02",
-          "test_end": "2017-11-07",
-          "r2_vs_media": 0.7324443297392331,
-          "r2_vs_har": 0.026699292130116126,
-          "har_r2_vs_media": 0.7251048231061852,
-          "shrink": 0.343
+          "test_start": "2015-09-08",
+          "test_end": "2017-11-13",
+          "r2_vs_media": 0.7249777874703165,
+          "r2_vs_har": -0.004629581249829595,
+          "har_r2_vs_media": 0.7262451577550239,
+          "shrink": 0.328
         },
         {
           "fold": 4,
-          "test_start": "2017-11-08",
-          "test_end": "2020-01-17",
-          "r2_vs_media": 0.5309869826518139,
-          "r2_vs_har": 0.064036447480886,
-          "har_r2_vs_media": 0.49889820379666105,
-          "shrink": 0.326
+          "test_start": "2017-11-14",
+          "test_end": "2020-01-27",
+          "r2_vs_media": 0.5132295080176754,
+          "r2_vs_har": 0.06105728927191545,
+          "har_r2_vs_media": 0.48157594023508843,
+          "shrink": 0.293
         },
         {
           "fold": 5,
-          "test_start": "2020-01-21",
-          "test_end": "2022-03-25",
-          "r2_vs_media": 0.5894212430574588,
-          "r2_vs_har": 0.055778730449838165,
-          "har_r2_vs_media": 0.5651667991569965,
-          "shrink": 0.16
+          "test_start": "2020-01-28",
+          "test_end": "2022-04-04",
+          "r2_vs_media": 0.596957131966494,
+          "r2_vs_har": 0.05508471840940177,
+          "har_r2_vs_media": 0.5734613717379462,
+          "shrink": 0.17
         },
         {
           "fold": 6,
-          "test_start": "2022-03-28",
-          "test_end": "2024-06-05",
-          "r2_vs_media": 0.7034644451076155,
-          "r2_vs_har": 0.19058691433707953,
-          "har_r2_vs_media": 0.6336412640901181,
-          "shrink": 0.76
+          "test_start": "2022-04-05",
+          "test_end": "2024-06-14",
+          "r2_vs_media": 0.714239734831111,
+          "r2_vs_har": 0.21564235954892774,
+          "har_r2_vs_media": 0.6356760609808652,
+          "shrink": 0.639
         },
         {
           "fold": 7,
-          "test_start": "2024-06-06",
-          "test_end": "2026-08-24",
-          "r2_vs_media": 0.46026464964785196,
-          "r2_vs_har": 0.167230709231869,
-          "har_r2_vs_media": 0.35187889811077677,
-          "shrink": 0.56
+          "test_start": "2024-06-17",
+          "test_end": "2026-08-31",
+          "r2_vs_media": 0.4607331950804934,
+          "r2_vs_har": 0.16473583004418657,
+          "har_r2_vs_media": 0.3543757480366546,
+          "shrink": 0.57
         }
       ],
       "horizon": 5,
@@ -2277,29 +2277,27 @@
   "resumen": {
     "h1": {
       "n": 8,
-      "mejora_media_sobre_har": 0.04774,
+      "mejora_media_sobre_har": 0.04811,
       "n_por_encima": 8,
       "n_significativos": 4,
-      "n_go": 7,
+      "n_go": 6,
       "tickers_go": [
         "AAPL",
         "AMZN",
         "META",
         "MSFT",
         "NVDA",
-        "QQQ",
         "SPY"
       ]
     },
     "h5": {
       "n": 8,
-      "mejora_media_sobre_har": 0.01903,
+      "mejora_media_sobre_har": 0.01694,
       "n_por_encima": 6,
-      "n_significativos": 3,
-      "n_go": 4,
+      "n_significativos": 2,
+      "n_go": 3,
       "tickers_go": [
         "META",
-        "MSFT",
         "QQQ",
         "SPY"
       ]
